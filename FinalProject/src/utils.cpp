@@ -4,6 +4,7 @@
 #include <iostream>
 #include <boost/locale.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 #include <archive.h>
 #include <archive_entry.h>
 
@@ -103,15 +104,49 @@ std::string read_archive(const std::string &file_name) {
     return ss.str();
 }
 
-std::string read_csv(const std::string &file_name) {
-    // TODO: Implement CSV reader
+bool                        is_valid_marker(std::string marker) {
+    const std::string    fasta_symbols = "ACGTURYKMSWBDHVN";
+    bool                 hasOnlySyms;
 
-    return nullptr;
+    const auto containsSymbols = [&fasta_symbols](char c) {
+        return fasta_symbols.find(c) != std::string::npos;
+    };
+
+    hasOnlySyms = std::all_of(marker.cbegin(), marker.cend(), containsSymbols);
+
+    return hasOnlySyms;
 }
 
-std::string read_fasta(const std::string &file_name) {
-    // TODO: Implement FASTA reader
+std::vector<std::string>    read_csv(const std::string &fileName) {
+    std::string                 line;
+    std::string                 marker;
+    std::ifstream               csvFile;
+    std::vector<std::string>    vMarkers;
+    std::vector<std::string>    splitResult;
 
-    return nullptr;
+    csvFile.open(fileName);
+    if (csvFile.good()) {
+        std::getline(csvFile, line);
+        boost::split(splitResult, line, boost::is_any_of(","));
+
+        if (splitResult.size() == 2 && is_valid_marker(splitResult[1])) {
+            vMarkers.push_back(splitResult[1]);
+        }
+
+    }
+    return vMarkers;
+}
+
+FastaRecord                 read_fasta(const std::string &fileName) {
+    std::string     name;
+    std::string     line;
+    std::ifstream   fastaFile;
+
+    fastaFile.open(fileName);
+    if (fastaFile.good()) {
+        std::getline(fastaFile, name);
+        std::getline(fastaFile, line);
+    }
+    return FastaRecord{std::move(name), std::move(line)};
 }
 
