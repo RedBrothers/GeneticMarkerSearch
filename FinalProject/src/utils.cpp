@@ -42,7 +42,6 @@ bool       is_archive(const std::string &file_name) {
 
 bool       is_csv_file(const std::string &file_name) {
     std::vector<std::string> extensions = {".csv"};
-
     return std::find(
             extensions.begin(),
             extensions.end(),
@@ -52,7 +51,7 @@ bool       is_csv_file(const std::string &file_name) {
 }
 
 bool       is_fasta_file(const std::string &file_name) {
-    std::vector<std::string> extensions = {".fasta"};
+    std::vector<std::string> extensions = {".fasta", ".fas", ".fna", ".faa", ".ffn"};
 
     return std::find(
             extensions.begin(),
@@ -121,11 +120,11 @@ std::vector<std::string>    read_csv(const std::string &fileName) {
     std::string                 line;
     std::string                 marker;
     std::ifstream               csvFile;
-    std::vector<std::string>    vMarkers;
+    std::vector<std::string>    vMarkers {};
     std::vector<std::string>    splitResult;
 
     csvFile.open(fileName);
-    if (csvFile.good()) {
+    while (csvFile.good()) {
         std::getline(csvFile, line);
         boost::split(splitResult, line, boost::is_any_of(","));
 
