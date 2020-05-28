@@ -47,7 +47,7 @@ add_executable(
 target_include_directories(${PROJECT_NAME} PUBLIC include src)
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
-        ${Boost_LIBRARIES}
-        ${ICU_LIBRARIES}
-        ${LibArchive_LIBRARIES}
+            ${Boost_LIBRARIES}
+            ${ICU_LIBRARIES}
+            ${LibArchive_LIBRARIES}
 )
