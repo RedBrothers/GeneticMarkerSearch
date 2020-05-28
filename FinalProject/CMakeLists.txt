@@ -28,7 +28,7 @@ find_package(LibArchive REQUIRED)
 
 add_executable(
             ${PROJECT_NAME}
-        src/main.cpp
+            src/main.cpp
             include/indexer.h
             include/queue.h
             include/config.h
@@ -38,7 +38,11 @@ add_executable(
             src/base_manager.cpp
             src/config.cpp
             src/indexer.cpp
-        src/utils.cpp include/utils.h)
+            src/utils.cpp
+            include/utils.h
+            include/aho_corasick.h
+            include/state.h
+)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include src)
 target_link_libraries(
