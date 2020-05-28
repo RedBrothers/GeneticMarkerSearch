@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.10)
 
 set(PROJECT_NAME Genes)
 project(${PROJECT_NAME})
@@ -16,10 +16,10 @@ endif()
 
 find_package(
         Boost REQUIRED COMPONENTS
-                locale
-                system
-                thread
-                filesystem
+            locale
+            system
+            thread
+            filesystem
 )
 
 find_package(Threads    REQUIRED)
@@ -27,7 +27,7 @@ find_package(LibArchive REQUIRED)
 
 
 add_executable(
-            ${PROJECT_NAME}
+        ${PROJECT_NAME}
             src/main.cpp
             include/indexer.h
             include/queue.h
@@ -49,5 +49,5 @@ target_link_libraries(
         ${PROJECT_NAME} PUBLIC
         ${Boost_LIBRARIES}
         ${ICU_LIBRARIES}
-        ${LibArchive_Libraries}
+        ${LibArchive_LIBRARIES}
 )
