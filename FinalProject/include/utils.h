@@ -32,9 +32,9 @@ bool                        is_fasta_file(const std::string& file_name);
 std::string                 read_archive(const std::string &file_name);
 
 void                        write_csv(
-        const std::vector <std::pair<std::string, std::vector<bool>>>& result,
-        std::vector <std::string>                               columns,
-        const std::string&                                             file_name
+        const std::vector <std::pair<std::string, std::vector<bool>>>&  result,
+        std::vector <std::string>                                       columns,
+        const std::string&                                              file_name
 );
 
 const std::string FASTA_CHARS {"ACGTURYKMSWBDHVN"};
