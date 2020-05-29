@@ -6,15 +6,26 @@
 
 struct FastaRecord
 {
-    std::string id{};
-    std::string sequence{};
+    std::string _id{};
+    std::string _sequence{};
 
     FastaRecord(
-            std::string id_,
-            std::string sequence_
-        )
-        : id{std::move(id_)}
-        , sequence{std::move(sequence_)} {};
+            std::string id,
+            std::string sequence)
+        : _id{std::move(id)}
+        , _sequence{std::move(sequence)} {};
+};
+
+struct MarkerRecord
+{
+    std::string _id;
+    std::string _marker;
+
+    MarkerRecord(
+            std::string id,
+            std::string marker)
+        : _id{std::move(id)}
+        , _marker{std::move(marker)} {};
 };
 
 
@@ -23,18 +34,18 @@ template<typename Stream>
 std::vector<FastaRecord>    read_fasta(Stream &stream);
 std::vector<FastaRecord>    read_fasta_file(const std::string &file_name);
 std::vector<FastaRecord>    read_fasta_string(const std::string &text);
-std::vector<std::string>    read_markers(const std::string& file_name, size_t max_rows=0);
+std::vector<MarkerRecord>   read_markers(const std::string& file_name, size_t max_rows = 0);
 std::vector<size_t>         split_file(const std::string& file, size_t n_chunks);
 bool                        is_archive(const std::string &file_name);
 bool                        is_csv_file(const std::string& file_name);
 bool                        is_text_file(const std::string& file_name);
 bool                        is_fasta_file(const std::string& file_name);
 std::string                 read_archive(const std::string &file_name);
-
-void                        write_csv(
-        const std::vector <std::pair<std::string, std::vector<bool>>>&  result,
-        std::vector <std::string>                                       columns,
-        const std::string&                                              file_name
+void                        write_result(
+        const std::string                    &file_name,
+        const std::vector<std::vector<bool>> &result,
+        const std::vector<std::string>       &sequence_ids,
+        const std::vector<std::string>       &marker_ids
 );
 
 const std::string FASTA_CHARS {"ACGTURYKMSWBDHVN"};
