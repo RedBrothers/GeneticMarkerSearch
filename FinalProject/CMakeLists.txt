@@ -42,7 +42,7 @@ add_executable(
             include/utils.h
             include/aho_corasick.h
             include/state.h
-        src/aho_corasick.cpp)
+            src/aho_corasick.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include src)
 target_link_libraries(
