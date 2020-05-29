@@ -8,7 +8,6 @@
 #include <archive.h>
 #include <archive_entry.h>
 
-
 namespace ba = boost::locale::boundary;
 namespace lc = boost::locale;
 
@@ -34,10 +33,6 @@ bool is_csv_file(const std::string &file_name) {
 
 bool is_fasta_file(const std::string &file_name) {
     return has_any_of_extensions(file_name, {".fasta", ".fas", ".fna", ".faa", ".ffn"});
-}
-
-bool is_text_file(const std::string &file_name) {
-    return has_any_of_extensions(file_name, {".txt"});
 }
 
 std::string read_archive(const std::string &file_name) {
@@ -125,6 +120,3 @@ std::vector<FastaRecord> read_fasta(const std::string &file_name) {
     records.emplace_back(id, sequence);
     return records;
 }
-
-
-

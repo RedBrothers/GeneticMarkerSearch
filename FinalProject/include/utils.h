@@ -33,5 +33,4 @@ constexpr char FASTA_COMMENT_START {';'};
 constexpr char FASTA_ID_START {'>'};
 constexpr char FASTA_ID_END {' '};
 
-
 #endif //GENES_UTILS_H
