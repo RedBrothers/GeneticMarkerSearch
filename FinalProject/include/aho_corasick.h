@@ -5,7 +5,15 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <exception>
 #include "state.h"
+
+
+struct PatternsNotSetException : public std::exception {
+    [[nodiscard]] const char * what() const noexcept override {
+        return "Patterns are not set";
+    }
+};
 
 
 class AhoCorasick
@@ -23,10 +31,11 @@ public:
     ~AhoCorasick() { reset(); }
 
     void set_patterns(const std::vector<std::string> &patterns);
-    std::vector<bool> match(const std::string &text) const;
+    [[nodiscard]] std::vector<bool> match(const std::string &text) const;
     void reset();
 private:
     bool _set;
+    void validate() const;
     void construct_trie();
     void construct_failure();
     [[nodiscard]] size_t g(size_t s, char c) const;

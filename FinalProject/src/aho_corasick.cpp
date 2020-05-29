@@ -1,10 +1,7 @@
 #include "aho_corasick.h"
 #include <queue>
 #include <iostream>
-#include <iterator>
-
-
-// TODO: add check if (!set) throw ...
+#include <exception>
 
 
 void AhoCorasick::set_patterns(const std::vector<std::string> &patterns) {
@@ -21,6 +18,12 @@ void AhoCorasick::reset() {
     _outputs.clear();
     _patterns.clear();
     _set = false;
+}
+
+
+void AhoCorasick::validate() const {
+    if (!_set || _patterns.empty())
+        throw PatternsNotSetException();
 }
 
 
@@ -50,7 +53,8 @@ void AhoCorasick::construct_trie() {
             }
             state = _states[state].next(c);
         }
-        _outputs[state].push_back(std::distance(_patterns.cbegin(), it));
+        _outputs[state].push_back(
+                std::distance(_patterns.cbegin(), it));
     }
 }
 
@@ -86,6 +90,8 @@ void AhoCorasick::construct_failure() {
 
 
 std::vector<bool> AhoCorasick::match(const std::string &text) const {
+    validate();
+
     size_t state = 0;
     std::vector<bool> matches(_patterns.size(), false);
 
