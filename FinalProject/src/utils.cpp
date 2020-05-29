@@ -72,15 +72,20 @@ bool is_valid_marker(const std::string& marker) {
             boost::is_any_of(FASTA_CHARS));
 }
 
-std::vector<std::string> read_markers(const std::string &file_name) {
+bool time_to_stop(size_t k, size_t max) {
+    return max ? (k >= max) : false;
+}
+
+std::vector<std::string> read_markers(const std::string &file_name, size_t max_rows) {
     std::vector<std::string>    markers {};
+    size_t                      rows {0};
     std::ifstream               file;
     std::string                 line;
     std::string                 marker;
     std::vector<std::string>    split_result;
 
     file.open(file_name);
-    while (std::getline(file, line)) {
+    while (std::getline(file, line) && !time_to_stop(rows++, max_rows)) {
         boost::split(split_result, line, boost::is_any_of(","));
 
         if (split_result.size() == 2 && is_valid_marker(split_result[1])) {
