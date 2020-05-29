@@ -128,8 +128,7 @@ std::vector<FastaRecord>    read_fasta(Stream &stream)
 }
 
 std::vector<FastaRecord>    read_fasta_file(const std::string &file_name) {
-    std::fstream file;
-    file.open(file_name);
+    std::fstream file{file_name};
     return read_fasta<std::fstream>(file);
 }
 
