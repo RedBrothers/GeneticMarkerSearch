@@ -76,27 +76,25 @@ bool time_to_stop(size_t k, size_t max) {
     return max ? (k >= max) : false;
 }
 
-std::vector<std::string> read_markers(const std::string &file_name, size_t max_rows) {
-    std::vector<std::string>    markers {};
-    size_t                      rows {0};
-    std::ifstream               file;
-    std::string                 line;
-    std::string                 marker;
-    std::vector<std::string>    split_result;
+std::vector<MarkerRecord> read_markers(const std::string &file_name, size_t max_rows) {
+    std::vector<MarkerRecord> records {};
+    std::ifstream             file {file_name};
+    size_t                    rows {0};
+    std::string               line;
+    std::string               id;
+    std::string               marker;
+    std::vector<std::string>  split;
 
-    file.open(file_name);
-    while (std::getline(file, line) && !time_to_stop(rows++, max_rows)) {
-        boost::split(split_result, line, boost::is_any_of(","));
-
-        if (split_result.size() == 2 && is_valid_marker(split_result[1])) {
-            markers.push_back(split_result[1]);
-        }
+    while(std::getline(file, line) && !time_to_stop(rows++, max_rows)) {
+        boost::split(split, line, boost::is_any_of(","));
+        if (split.size() == 2 && is_valid_marker(split[1]))
+            records.emplace_back(split[0], split[1]);
     }
-    return markers;
+    return records;
 }
 
 template<typename Stream>
-std::vector<FastaRecord>    read_fasta(Stream &stream)
+std::vector<FastaRecord> read_fasta(Stream &stream)
 {
     std::vector<FastaRecord> records {};
     std::string              line;
@@ -124,43 +122,35 @@ std::vector<FastaRecord>    read_fasta(Stream &stream)
     }
     records.emplace_back(id, sequence);
     return records;
-
 }
 
-std::vector<FastaRecord>    read_fasta_file(const std::string &file_name) {
+std::vector<FastaRecord> read_fasta_file(const std::string &file_name) {
     std::fstream file{file_name};
     return read_fasta<std::fstream>(file);
 }
 
-std::vector<FastaRecord>    read_fasta_string(const std::string &text) {
+std::vector<FastaRecord> read_fasta_string(const std::string &text) {
     std::stringstream stream{text};
     return read_fasta<std::stringstream>(stream);
 }
 
-void write_csv( const std::vector <std::pair<std::string, std::vector<bool>>>& result,
-                std::vector <std::string>                                      columns,
-                const std::string&                                             file_name)
+void write_result(
+        const std::string                    &file_name,
+        const std::vector<std::vector<bool>> &result,
+        const std::vector<std::string>       &sequence_ids,
+        const std::vector<std::string>       &marker_ids)
 {
-    std::ofstream out_file{file_name};
+    assert(result.size() == sequence_ids.size());
+    std::ofstream file{file_name};
 
-    for (int i = 0; i < columns.size(); ++i) {
-        out_file << columns[i];
-        if (i != columns.size() - 1)
-            out_file << ",";
-    }
-    out_file << "\n";
+    for (const auto& id : marker_ids)
+        file << "," << id;
+    file << "\n";
 
-    for (auto& res: result) {
-        auto fasta_name = res.first;
-        auto match_result = res.second;
-
-        out_file << fasta_name << ",";
-
-        for (int i = 0; i < match_result.size(); ++i) {
-            out_file << match_result[i];
-            if (i != match_result.size() - 1)
-                out_file << ",";
-        }
-        out_file << "\n";
+    for (size_t j = 0; j < sequence_ids.size(); ++j) {
+        file << sequence_ids[j];
+        for (auto res : result[j])
+            file << "," << res;
+        file << "\n";
     }
 }
