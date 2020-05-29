@@ -21,7 +21,6 @@ bool                        is_text_file(const std::string& file_name);
 bool                        is_fasta_file(const std::string& file_name);
 std::string                 read_archive(const std::string &file_name);
 
-const std::string FASTA_CHARS {"ACGTURYKMSWBDHVN"};
 constexpr char FASTA_DELIM {'>'};
 
 

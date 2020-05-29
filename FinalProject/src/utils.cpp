@@ -73,10 +73,11 @@ std::string read_archive(const std::string &file_name) {
 }
 
 bool is_valid_marker(const std::string& marker) {
-    bool valid;
+    bool              valid;
+    const std::string chars {"ACGTURYKMSWBDHVN"};
 
     const auto is_valid_char = [&](char c) {
-        return FASTA_CHARS.find(c) != std::string::npos;
+        return chars.find(c) != std::string::npos;
     };
 
     valid = std::all_of(marker.cbegin(), marker.cend(), is_valid_char);
