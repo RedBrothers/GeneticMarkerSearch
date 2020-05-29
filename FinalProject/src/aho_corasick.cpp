@@ -26,7 +26,7 @@ void AhoCorasick::reset() {
 size_t AhoCorasick::g(size_t s, char c) const {
     if (_states[s].has_key(c)) {
         return _states[s].next(c);
-    } else if (_states[0].has_key(c)) {
+    } else if (!_states[0].has_key(c)) {
         return 0;
     } else {
         return -1;
@@ -89,10 +89,11 @@ void AhoCorasick::match(const std::string &text) const {
         while (g(state, text[i]) == -1)
             state = _failure.at(state);
         state = g(state, text[i]);
-        for (const auto& out : _outputs.at(state)) {
-            std::cout
-                << out << " found at position "
-                << i - out.length() << std::endl;
-        }
+        if (_outputs.count(state))
+            for (const auto& out : _outputs.at(state)) {
+                std::cout
+                    << out << " found at position "
+                    << i - out.length() + 1 << std::endl;
+            }
     }
 }

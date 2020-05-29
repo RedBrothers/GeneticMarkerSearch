@@ -11,10 +11,13 @@
 class AhoCorasick
 {
 private:
-    std::vector<std::string>                   _patterns;
-    std::vector<State>                         _states;
-    std::map<size_t, size_t>                   _failure;
-    std::map<size_t, std::vector<std::string>> _outputs; // why vector?
+    std::map<
+        size_t,
+        std::vector<std::string>
+        >                           _outputs;
+    std::vector<std::string>        _patterns;
+    std::vector<State>              _states;
+    std::map<size_t, size_t>        _failure;
 public:
     AhoCorasick() : _set{ false } { reset(); }
     ~AhoCorasick() { reset(); }
