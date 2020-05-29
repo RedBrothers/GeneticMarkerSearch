@@ -73,27 +73,19 @@ std::string read_archive(const std::string &file_name) {
 }
 
 bool is_valid_marker(const std::string& marker) {
-    bool              valid;
-    const std::string chars {"ACGTURYKMSWBDHVN"};
-
-    const auto is_valid_char = [&](char c) {
-        return chars.find(c) != std::string::npos;
-    };
-
-    valid = std::all_of(marker.cbegin(), marker.cend(), is_valid_char);
-    return valid;
+    return std::all_of(marker.cbegin(), marker.cend(),
+            boost::is_any_of(FASTA_CHARS));
 }
 
 std::vector<std::string> read_csv(const std::string &file_name) {
+    std::vector<std::string>    markers {};
+    std::ifstream               file;
     std::string                 line;
     std::string                 marker;
-    std::ifstream               csv_file;
-    std::vector<std::string>    markers {};
     std::vector<std::string>    split_result;
 
-    csv_file.open(file_name);
-    while (csv_file.good()) {
-        std::getline(csv_file, line);
+    file.open(file_name);
+    while (std::getline(file, line)) {
         boost::split(split_result, line, boost::is_any_of(","));
 
         if (split_result.size() == 2 && is_valid_marker(split_result[1])) {
@@ -103,16 +95,36 @@ std::vector<std::string> read_csv(const std::string &file_name) {
     return markers;
 }
 
-FastaRecord read_fasta(const std::string &file_name) {
-    std::string     name;
-    std::string     line;
-    std::ifstream   fasta_file;
+std::vector<FastaRecord> read_fasta(const std::string &file_name) {
+    std::vector<FastaRecord> records {};
+    std::ifstream            file;
+    std::string              line;
+    std::string              id;
+    std::string              sequence;
+    bool                     first {true};
 
-    fasta_file.open(file_name);
-    if (fasta_file.good()) {
-        std::getline(fasta_file, name);
-        std::getline(fasta_file, line);
+    file.open(file_name);
+    while (std::getline(file, line)) {
+        if (line.empty())
+            continue;
+
+        if (line[0] == FASTA_COMMENT_START)
+            continue;
+
+        if (line[0] == FASTA_ID_START) {
+            if (!first) {
+                records.emplace_back(id, sequence);
+                sequence.clear();
+            }
+            id = line.substr(1, line.find(FASTA_ID_END) - 1);
+            first = false;
+        } else {
+            sequence += line;
+        }
     }
-    return FastaRecord{std::move(name), std::move(line)};
+    records.emplace_back(id, sequence);
+    return records;
 }
+
+
 
