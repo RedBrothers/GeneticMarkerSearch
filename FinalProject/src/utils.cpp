@@ -95,48 +95,16 @@ std::vector<std::string> read_markers(const std::string &file_name, size_t max_r
     return markers;
 }
 
-std::vector<FastaRecord> read_fasta_file(const std::string &file_name) {
-    std::vector<FastaRecord> records {};
-    std::ifstream            file;
-    std::string              line;
-    std::string              id;
-    std::string              sequence;
-    bool                     first {true};
-
-    file.open(file_name);
-    while (std::getline(file, line)) {
-        if (line.empty())
-            continue;
-
-        if (line[0] == FASTA_COMMENT_START)
-            continue;
-
-        if (line[0] == FASTA_ID_START) {
-            if (!first) {
-                records.emplace_back(id, sequence);
-                sequence.clear();
-            }
-            id = line.substr(1, line.find(FASTA_ID_END) - 1);
-            first = false;
-        } else {
-            sequence += line;
-        }
-    }
-    records.emplace_back(id, sequence);
-    return records;
-}
-
-
-std::vector<FastaRecord>    read_fasta_string(const std::string& fasta_string)
+template<typename Stream>
+std::vector<FastaRecord>    read_fasta(Stream &stream)
 {
     std::vector<FastaRecord> records {};
-    std::stringstream        fasta_ss{fasta_string};
     std::string              line;
     std::string              id;
     std::string              sequence;
     bool                     first {true};
 
-    while (std::getline(fasta_ss, line)) {
+    while (std::getline(stream, line)) {
         if (line.empty())
             continue;
 
@@ -156,6 +124,18 @@ std::vector<FastaRecord>    read_fasta_string(const std::string& fasta_string)
     }
     records.emplace_back(id, sequence);
     return records;
+
+}
+
+std::vector<FastaRecord>    read_fasta_file(const std::string &file_name) {
+    std::fstream file;
+    file.open(file_name);
+    return read_fasta<std::fstream>(file);
+}
+
+std::vector<FastaRecord>    read_fasta_string(const std::string &text) {
+    std::stringstream stream{text};
+    return read_fasta<std::stringstream>(stream);
 }
 
 void write_csv( const std::vector <std::pair<std::string, std::vector<bool>>>& result,

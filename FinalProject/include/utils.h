@@ -19,8 +19,10 @@ struct FastaRecord
 
 
 // file manipulations
-std::vector<FastaRecord>    read_fasta_file(const std::string& file_name);
-std::vector<FastaRecord>    read_fasta_string(const std::string& fasta_string);
+template<typename Stream>
+std::vector<FastaRecord>    read_fasta(Stream &stream);
+std::vector<FastaRecord>    read_fasta_file(const std::string &file_name);
+std::vector<FastaRecord>    read_fasta_string(const std::string &text);
 std::vector<std::string>    read_markers(const std::string& file_name, size_t max_rows=0);
 std::vector<size_t>         split_file(const std::string& file, size_t n_chunks);
 bool                        is_archive(const std::string &file_name);
