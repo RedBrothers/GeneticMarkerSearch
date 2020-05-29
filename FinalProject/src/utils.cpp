@@ -163,5 +163,4 @@ void write_csv( const std::vector <std::pair<std::string, std::vector<bool>>>& r
         }
         out_file << "\n";
     }
-    out_file.close();
 }
