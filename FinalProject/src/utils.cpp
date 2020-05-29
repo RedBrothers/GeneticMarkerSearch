@@ -72,7 +72,7 @@ bool is_valid_marker(const std::string& marker) {
             boost::is_any_of(FASTA_CHARS));
 }
 
-std::vector<std::string> read_csv(const std::string &file_name) {
+std::vector<std::string> read_markers(const std::string &file_name) {
     std::vector<std::string>    markers {};
     std::ifstream               file;
     std::string                 line;

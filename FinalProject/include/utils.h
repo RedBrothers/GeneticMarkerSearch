@@ -19,8 +19,8 @@ struct FastaRecord
 
 
 // file manipulations
-std::vector<std::string>    read_csv(const std::string& file_name);
 std::vector<FastaRecord>    read_fasta(const std::string& file_name);
+std::vector<std::string>    read_markers(const std::string& file_name);
 std::vector<size_t>         split_file(const std::string& file, size_t n_chunks);
 bool                        is_archive(const std::string &file_name);
 bool                        is_csv_file(const std::string& file_name);
