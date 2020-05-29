@@ -1,6 +1,7 @@
 #include "aho_corasick.h"
 #include <queue>
 #include <iostream>
+#include <iterator>
 
 
 // TODO: add check if (!set) throw ...
@@ -38,16 +39,18 @@ void AhoCorasick::construct_trie() {
     size_t id {0};
     _states.emplace_back(id);
 
-    for(const auto& pattern : _patterns) {
-        size_t s = 0;
+    for (auto it = _patterns.cbegin(); it != _patterns.cend(); ++it) {
+        auto pattern = *it;
+        size_t state = 0;
+
         for (auto c : pattern) {
-            if (!_states[s].has_key(c)) {
+            if (!_states[state].has_key(c)) {
                 _states.emplace_back(++id);
-                _states[s].set_next(c, id);
+                _states[state].set_next(c, id);
             }
-            s = _states[s].next(c);
+            state = _states[state].next(c);
         }
-        _outputs[s].push_back(pattern);
+        _outputs[state].push_back(std::distance(_patterns.cbegin(), it));
     }
 }
 
@@ -71,29 +74,29 @@ void AhoCorasick::construct_failure() {
                     s = _failure[s];
                 _failure[next] = g(s, c);
 
-                auto words = _outputs[_failure[next]];
-                if (!words.empty())
+                auto indexes = _outputs[_failure[next]];
+                if (!indexes.empty())
                     _outputs[next].insert(
                             _outputs[next].end(),
-                            words.cbegin(), words.cend());
+                            indexes.cbegin(), indexes.cend());
             }
         }
     }
 }
 
 
-void AhoCorasick::match(const std::string &text) const {
+std::vector<bool> AhoCorasick::match(const std::string &text) const {
     size_t state = 0;
+    std::vector<bool> matches(_patterns.size(), false);
 
-    for (auto i = 0; i < text.length(); ++ i) {
-        while (g(state, text[i]) == -1)
+    for (char c : text) {
+        while (g(state, c) == -1)
             state = _failure.at(state);
-        state = g(state, text[i]);
+        state = g(state, c);
         if (_outputs.count(state))
-            for (const auto& out : _outputs.at(state)) {
-                std::cout
-                    << out << " found at position "
-                    << i - out.length() + 1 << std::endl;
-            }
+            for (auto idx : _outputs.at(state))
+                matches[idx] = true;
     }
+
+    return matches;
 }
