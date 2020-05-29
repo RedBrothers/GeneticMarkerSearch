@@ -21,7 +21,7 @@ find_package(
             thread
             filesystem
 )
-
+find_package(TBB        REQUIRED)
 find_package(Threads    REQUIRED)
 find_package(LibArchive REQUIRED)
 
@@ -44,10 +44,14 @@ add_executable(
             include/state.h
             src/aho_corasick.cpp)
 
-target_include_directories(${PROJECT_NAME} PUBLIC include src)
+target_include_directories(
+        ${PROJECT_NAME} PUBLIC
+            include
+            src)
+
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
             ${Boost_LIBRARIES}
             ${ICU_LIBRARIES}
             ${LibArchive_LIBRARIES}
-)
+            ${TBB_IMPORTED_TARGETS})
