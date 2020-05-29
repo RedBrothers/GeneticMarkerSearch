@@ -6,6 +6,7 @@
 #include <queue>
 #include "state.h"
 
+
 class AhoCorasick
 {
 private:
@@ -135,18 +136,18 @@ public:
             }
         }
 
-        // make contents formated html
-        for (auto match = match_places.begin(); match != match_places.end(); ++match)
+        // make contents formatted html
+        for (auto & match_place : match_places)
         {
-            dis = match->second[0];
-            if (match->second.size() > 1)
+            dis = match_place.second[0];
+            if (match_place.second.size() > 1)
             {
-                for (int i = 0; i < match->second.size(); i++)
+                for (int & i : match_place.second)
                 {
-                    dis = (match->second[i] > dis) ? match->second[i] : dis;
+                    dis = (i > dis) ? i : dis;
                 }
             }
-            contents.insert(match->first + bold_num * 7, "<b>");
+            contents.insert(match_place.first + bold_num * 7, "<b>");
             contents.insert(dis + bold_num * 7 + 4, "</b>");
             bold_num++;
         }

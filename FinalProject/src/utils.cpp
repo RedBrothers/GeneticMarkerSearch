@@ -11,49 +11,11 @@
 namespace ba = boost::locale::boundary;
 namespace lc = boost::locale;
 
-Dict        count_words(const std::string& file, size_t start, size_t end) {
-    Dict                chunk_map;
-    ba::ssegment_index  map(ba::word, file.begin() + start, file.begin() + end);
-    map.rule(ba::word_letters);
 
-    for (auto it = map.begin(), e = map.end(); it != e; ++it) {
-
-        std::string word(*it);
-
-        word = lc::normalize(word);
-        word = lc::fold_case(word);
-
-        ++chunk_map[word];
-    }
-
-    return chunk_map;
-}
-
-bool       is_archive(const std::string &file_name) {
-    std::vector<std::string> extensions = {".zip", ".tar", ".tar.gz", ".gz", ".7z"};
-
-    return std::find(
-            extensions.begin(),
-            extensions.end(),
-            boost::locale::to_lower(boost::filesystem::extension(file_name))
-    ) != extensions.end();
-
-}
-
-bool       is_csv_file(const std::string &file_name) {
-    std::vector<std::string> extensions = {".csv"};
-
-    return std::find(
-            extensions.begin(),
-            extensions.end(),
-            boost::locale::to_lower(boost::filesystem::extension(file_name))
-    ) != extensions.end();
-
-}
-
-bool       is_fasta_file(const std::string &file_name) {
-    std::vector<std::string> extensions = {".fasta"};
-
+bool has_any_of_extensions(
+        const std::string &file_name,
+        const std::vector<std::string> &extensions
+        ) {
     return std::find(
             extensions.begin(),
             extensions.end(),
@@ -61,15 +23,16 @@ bool       is_fasta_file(const std::string &file_name) {
     ) != extensions.end();
 }
 
-bool       is_text_file(const std::string &file_name) {
-    std::vector<std::string> extensions = {".txt"};
+bool is_archive(const std::string &file_name) {
+    return has_any_of_extensions(file_name, {".zip", ".tar", ".tar.gz", ".gz", ".7z"});
+}
 
-    return std::find(
-            extensions.begin(),
-            extensions.end(),
-            boost::locale::to_lower(boost::filesystem::extension(file_name))
-    ) != extensions.end();
+bool is_csv_file(const std::string &file_name) {
+    return has_any_of_extensions(file_name, {".csv"});
+}
 
+bool is_fasta_file(const std::string &file_name) {
+    return has_any_of_extensions(file_name, {".fasta", ".fas", ".fna", ".faa", ".ffn"});
 }
 
 std::string read_archive(const std::string &file_name) {
@@ -104,49 +67,56 @@ std::string read_archive(const std::string &file_name) {
     return ss.str();
 }
 
-bool                        is_valid_marker(std::string marker) {
-    const std::string    fasta_symbols = "ACGTURYKMSWBDHVN";
-    bool                 hasOnlySyms;
-
-    const auto containsSymbols = [&fasta_symbols](char c) {
-        return fasta_symbols.find(c) != std::string::npos;
-    };
-
-    hasOnlySyms = std::all_of(marker.cbegin(), marker.cend(), containsSymbols);
-
-    return hasOnlySyms;
+bool is_valid_marker(const std::string& marker) {
+    return std::all_of(marker.cbegin(), marker.cend(),
+            boost::is_any_of(FASTA_CHARS));
 }
 
-std::vector<std::string>    read_csv(const std::string &fileName) {
+std::vector<std::string> read_markers(const std::string &file_name) {
+    std::vector<std::string>    markers {};
+    std::ifstream               file;
     std::string                 line;
     std::string                 marker;
-    std::ifstream               csvFile;
-    std::vector<std::string>    vMarkers;
-    std::vector<std::string>    splitResult;
+    std::vector<std::string>    split_result;
 
-    csvFile.open(fileName);
-    if (csvFile.good()) {
-        std::getline(csvFile, line);
-        boost::split(splitResult, line, boost::is_any_of(","));
+    file.open(file_name);
+    while (std::getline(file, line)) {
+        boost::split(split_result, line, boost::is_any_of(","));
 
-        if (splitResult.size() == 2 && is_valid_marker(splitResult[1])) {
-            vMarkers.push_back(splitResult[1]);
+        if (split_result.size() == 2 && is_valid_marker(split_result[1])) {
+            markers.push_back(split_result[1]);
         }
-
     }
-    return vMarkers;
+    return markers;
 }
 
-FastaRecord                 read_fasta(const std::string &fileName) {
-    std::string     name;
-    std::string     line;
-    std::ifstream   fastaFile;
+std::vector<FastaRecord> read_fasta(const std::string &file_name) {
+    std::vector<FastaRecord> records {};
+    std::ifstream            file;
+    std::string              line;
+    std::string              id;
+    std::string              sequence;
+    bool                     first {true};
 
-    fastaFile.open(fileName);
-    if (fastaFile.good()) {
-        std::getline(fastaFile, name);
-        std::getline(fastaFile, line);
+    file.open(file_name);
+    while (std::getline(file, line)) {
+        if (line.empty())
+            continue;
+
+        if (line[0] == FASTA_COMMENT_START)
+            continue;
+
+        if (line[0] == FASTA_ID_START) {
+            if (!first) {
+                records.emplace_back(id, sequence);
+                sequence.clear();
+            }
+            id = line.substr(1, line.find(FASTA_ID_END) - 1);
+            first = false;
+        } else {
+            sequence += line;
+        }
     }
-    return FastaRecord{std::move(name), std::move(line)};
+    records.emplace_back(id, sequence);
+    return records;
 }
-
