@@ -19,12 +19,10 @@ find_package(
             locale
             system
             thread
-            filesystem
-)
+            filesystem)
 find_package(TBB        REQUIRED)
 find_package(Threads    REQUIRED)
 find_package(LibArchive REQUIRED)
-
 
 add_executable(
         ${PROJECT_NAME}
