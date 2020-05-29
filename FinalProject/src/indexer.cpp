@@ -9,16 +9,16 @@ void Indexer::run() {
 }
 
 void Indexer::index_dir(const std::string& dir) {
-//    for (auto& p : fs::recursive_directory_iterator(dir)) {
-//        auto path = fs::canonical(p).string();
-//        std::string file;
-//        if (is_archive(path)) {
-//            file = read_archive(path);
-//        } else if (is_fasta_file(path)) {
-//            file = read_fasta(path);
-//        } else {
-//            continue;
-//        }
-//        file_queue_.push_front(std::move(file));
-//    }
+    for (auto& p : fs::recursive_directory_iterator(dir)) {
+        auto path = fs::canonical(p).string();
+        std::vector<FastaRecord> fasta;
+        if (is_archive(path)) {
+            fasta = read_fasta_string(read_archive(path));
+        } else if (is_fasta_file(path)) {
+            fasta = read_fasta_file(path);
+        } else {
+            continue;
+        }
+        file_queue_.push_front(std::move(fasta));
+    }
 }
