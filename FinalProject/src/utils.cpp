@@ -95,7 +95,7 @@ std::vector<std::string> read_markers(const std::string &file_name, size_t max_r
     return markers;
 }
 
-std::vector<FastaRecord> read_fasta(const std::string &file_name) {
+std::vector<FastaRecord> read_fasta_file(const std::string &file_name) {
     std::vector<FastaRecord> records {};
     std::ifstream            file;
     std::string              line;
@@ -124,4 +124,65 @@ std::vector<FastaRecord> read_fasta(const std::string &file_name) {
     }
     records.emplace_back(id, sequence);
     return records;
+}
+
+
+std::vector<FastaRecord>    read_fasta_string(const std::string& fasta_string)
+{
+    std::vector<FastaRecord> records {};
+    std::stringstream        fasta_ss{fasta_string};
+    std::string              line;
+    std::string              id;
+    std::string              sequence;
+    bool                     first {true};
+
+    while (std::getline(fasta_ss, line)) {
+        if (line.empty())
+            continue;
+
+        if (line[0] == FASTA_COMMENT_START)
+            continue;
+
+        if (line[0] == FASTA_ID_START) {
+            if (!first) {
+                records.emplace_back(id, sequence);
+                sequence.clear();
+            }
+            id = line.substr(1, line.find(FASTA_ID_END) - 1);
+            first = false;
+        } else {
+            sequence += line;
+        }
+    }
+    records.emplace_back(id, sequence);
+    return records;
+}
+
+void write_csv( const std::vector <std::pair<std::string, std::vector<bool>>>& result,
+                std::vector <std::string>                                      columns,
+                const std::string&                                             file_name)
+{
+    std::ofstream out_file{file_name};
+
+    for (int i = 0; i < columns.size(); ++i) {
+        out_file << columns[i];
+        if (i != columns.size() - 1)
+            out_file << ",";
+    }
+    out_file << "\n";
+
+    for (auto& res: result) {
+        auto fasta_name = res.first;
+        auto match_result = res.second;
+
+        out_file << fasta_name << ",";
+
+        for (int i = 0; i < match_result.size(); ++i) {
+            out_file << match_result[i];
+            if (i != match_result.size() - 1)
+                out_file << ",";
+        }
+        out_file << "\n";
+    }
+    out_file.close();
 }

@@ -6,8 +6,8 @@
 
 struct FastaRecord
 {
-    std::string id;
-    std::string sequence;
+    std::string id{};
+    std::string sequence{};
 
     FastaRecord(
             std::string id_,
@@ -19,7 +19,8 @@ struct FastaRecord
 
 
 // file manipulations
-std::vector<FastaRecord>    read_fasta(const std::string& file_name);
+std::vector<FastaRecord>    read_fasta_file(const std::string& file_name);
+std::vector<FastaRecord>    read_fasta_string(const std::string& fasta_string);
 std::vector<std::string>    read_markers(const std::string& file_name, size_t max_rows=0);
 std::vector<size_t>         split_file(const std::string& file, size_t n_chunks);
 bool                        is_archive(const std::string &file_name);
@@ -27,6 +28,12 @@ bool                        is_csv_file(const std::string& file_name);
 bool                        is_text_file(const std::string& file_name);
 bool                        is_fasta_file(const std::string& file_name);
 std::string                 read_archive(const std::string &file_name);
+
+void                        write_csv(
+        const std::vector <std::pair<std::string, std::vector<bool>>>& result,
+        std::vector <std::string>                               columns,
+        const std::string&                                             file_name
+);
 
 const std::string FASTA_CHARS {"ACGTURYKMSWBDHVN"};
 constexpr char FASTA_COMMENT_START {';'};
