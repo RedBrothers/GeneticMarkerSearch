@@ -5,11 +5,19 @@
 #include "utils.h"
 #include "aho_corasick.h"
 
+#include "tbb/concurrent_queue.h"
 
 typedef std::chrono::duration<float> float_seconds;
 
 
 int main(int argc, char **argv) {
+    tbb::concurrent_bounded_queue<std::string> q;
+    q.set_capacity(1);
+    q.push("1");
+    std::string out;
+    q.pop(out);
+    std::cout << out << std::endl << std::endl;
+
     size_t max_rows {10};
     auto read_start = std::chrono::high_resolution_clock::now();
     auto markers = read_markers("../markers.csv", max_rows);
