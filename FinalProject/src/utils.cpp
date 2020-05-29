@@ -42,6 +42,7 @@ bool       is_archive(const std::string &file_name) {
 
 bool       is_csv_file(const std::string &file_name) {
     std::vector<std::string> extensions = {".csv"};
+
     return std::find(
             extensions.begin(),
             extensions.end(),
