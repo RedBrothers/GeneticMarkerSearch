@@ -3,6 +3,7 @@
 #include "typedefs.h"
 #include <vector>
 #include <string>
+#define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS 1
 
 struct FastaRecord
 {
@@ -14,6 +15,8 @@ struct FastaRecord
             std::string sequence)
         : _id{std::move(id)}
         , _sequence{std::move(sequence)} {};
+
+    FastaRecord(): _id{nullptr}, _sequence{nullptr} {};
 };
 
 struct MarkerRecord
