@@ -17,13 +17,13 @@ class Program {
     SequenceReader               _reader;
     std::vector<SequenceMatcher> _matchers;
 
-    std::string                  markers_file;
-    std::string                  sequences_dir;
+    std::string                  _result_file;
+    std::string                  _markers_file;
 
-    tbb::concurrent_bounded_queue<std::string>          _q;
+    tbb::concurrent_bounded_queue<FastaRecord>          _q;
     tbb::concurrent_map<std::string, std::vector<bool>> _m;
 public:
-    Program(size_t n_matchers, std::string, std::string);
+    Program(size_t n_matchers, size_t max_queue_size, std::string, std::string, std::string);
     void run();
 };
 
