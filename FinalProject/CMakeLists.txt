@@ -27,20 +27,20 @@ find_package(LibArchive REQUIRED)
 add_executable(
         ${PROJECT_NAME}
             src/main.cpp
-            include/indexer.h
-            include/queue.h
             include/config.h
-            include/base_manager.h
             include/typedefs.h
-            include/queue_manager.h
-            src/base_manager.cpp
             src/config.cpp
-            src/indexer.cpp
             src/utils.cpp
             include/utils.h
             include/aho_corasick.h
             include/state.h
-            src/aho_corasick.cpp)
+            src/aho_corasick.cpp
+            src/program.cpp
+            include/program.h
+            src/reader.cpp
+            include/reader.h
+            src/matcher.cpp
+            include/matcher.h)
 
 target_include_directories(
         ${PROJECT_NAME} PUBLIC

@@ -18,8 +18,8 @@ struct FastaRecord
 
 struct MarkerRecord
 {
-    std::string _id;
-    std::string _marker;
+    std::string _id{};
+    std::string _marker{};
 
     MarkerRecord(
             std::string id,
