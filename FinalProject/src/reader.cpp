@@ -1,15 +1,18 @@
 #include <boost/filesystem.hpp>
-#include "../include/indexer.h"
-#include "../include/utils.h"
+#include "utils.h"
+#include "reader.h"
 
 namespace fs = boost::filesystem;
 
-void Indexer::run() {
-    index_dir(indir_);
-}
 
-void Indexer::index_dir(const std::string& dir) {
-    for (auto& p : fs::recursive_directory_iterator(dir)) {
+SequenceReader::SequenceReader(
+        std::string dir,
+        tbb::concurrent_bounded_queue<FastaRecord> &q)
+        : _dir {std::move(dir)}
+        , _q {q} {}
+
+void SequenceReader::run() {
+    for (auto& p : fs::recursive_directory_iterator(_dir)) {
         auto path = fs::canonical(p).string();
         std::vector<FastaRecord> fasta;
         if (is_archive(path)) {
@@ -19,6 +22,8 @@ void Indexer::index_dir(const std::string& dir) {
         } else {
             continue;
         }
-        file_queue_.push_front(std::move(fasta));
+
+        for (auto&& f : fasta)
+            while(!_q.try_push(f));
     }
 }
