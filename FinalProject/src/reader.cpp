@@ -5,6 +5,12 @@
 namespace fs = boost::filesystem;
 
 
+SequenceReader::SequenceReader(
+        std::string dir,
+        tbb::concurrent_bounded_queue<FastaRecord> &q)
+        : _dir {std::move(dir)}
+        , _q {q} {}
+
 void SequenceReader::run() {
     for (auto& p : fs::recursive_directory_iterator(_dir)) {
         auto path = fs::canonical(p).string();

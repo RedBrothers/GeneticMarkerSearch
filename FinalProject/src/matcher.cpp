@@ -2,6 +2,15 @@
 #include "matcher.h"
 
 
+SequenceMatcher::SequenceMatcher(
+        AhoCorasick &ac,
+        tbb::concurrent_bounded_queue<FastaRecord> &q,
+        tbb::concurrent_map<std::string, std::vector<bool>> &m
+        )
+        : _ac{ac}
+        , _q{q}
+        , _m{m} {}
+
 void SequenceMatcher::run() {
     FastaRecord fasta {};
 
