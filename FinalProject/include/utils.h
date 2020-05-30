@@ -16,7 +16,7 @@ struct FastaRecord
         : _id{std::move(id)}
         , _sequence{std::move(sequence)} {};
 
-    FastaRecord(): _id{nullptr}, _sequence{nullptr} {};
+    FastaRecord(): _id{""}, _sequence{""} {};
 };
 
 struct MarkerRecord
