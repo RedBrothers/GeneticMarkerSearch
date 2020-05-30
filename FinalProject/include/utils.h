@@ -37,13 +37,14 @@ template<typename Stream>
 std::vector<FastaRecord>    read_fasta(Stream &stream);
 std::vector<FastaRecord>    read_fasta_file(const std::string &file_name);
 std::vector<FastaRecord>    read_fasta_string(const std::string &text);
+std::vector<FastaRecord>    read_archive(const std::string &file_name);
 std::vector<MarkerRecord>   read_markers(const std::string& file_name, size_t max_rows = 0);
 std::vector<size_t>         split_file(const std::string& file, size_t n_chunks);
 bool                        is_archive(const std::string &file_name);
 bool                        is_csv_file(const std::string& file_name);
 bool                        is_text_file(const std::string& file_name);
 bool                        is_fasta_file(const std::string& file_name);
-std::string                 read_archive(const std::string &file_name);
+
 void                        write_result(
         const std::string                    &file_name,
         const std::vector<std::vector<bool>> &result,

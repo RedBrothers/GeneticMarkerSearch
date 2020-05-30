@@ -10,14 +10,6 @@ set(Boost_USE_MULTITHREAD       ON)
 set(Boost_USE_STATIC_LIBS       OFF)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-
-if(APPLE)
-    set(LibArchive_INCLUDE_DIR "/usr/local/opt/libarchive/include")
-    set(LibArchive_LIBRARY "/usr/local/opt/libarchive/lib/libarchive.dylib")
-endif()
-
-
-
 find_package(
         Boost REQUIRED COMPONENTS
             locale
@@ -28,9 +20,7 @@ find_package(
 
 find_package(TBB        REQUIRED)
 find_package(Threads    REQUIRED)
-find_package(LibArchive REQUIRED)
 
-include_directories(${LibArchive_INCLUDE_DIR})
 
 add_executable(
         ${PROJECT_NAME}
@@ -54,11 +44,9 @@ target_include_directories(
         ${PROJECT_NAME} PUBLIC
             include
             src
-            ${LibArchive_INCLUDE_DIR}
 )
 
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
             ${Boost_LIBRARIES}
-            ${LibArchive_LIBRARY}
             ${TBB_IMPORTED_TARGETS})
