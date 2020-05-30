@@ -1,16 +1,15 @@
 #include "utils.h"
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include <boost/locale.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
-#include <archive.h>
-#include <archive_entry.h>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
 namespace ba = boost::locale::boundary;
 namespace lc = boost::locale;
-
+namespace bio = boost::iostreams;
 
 bool has_any_of_extensions(
         const std::string &file_name,
@@ -35,36 +34,13 @@ bool is_fasta_file(const std::string &file_name) {
     return has_any_of_extensions(file_name, {".fasta", ".fas", ".fna", ".faa", ".ffn"});
 }
 
-std::string read_archive(const std::string &file_name) {
-    std::stringstream           ss;
-    std::vector<std::string>    vs;
-    struct archive              *a;
-    struct archive_entry        *entry;
+std::vector<FastaRecord> read_fasta_archive(const std::string &file_name) {
+    std::ifstream file(file_name, std::ios_base::in | std::ios_base::binary);
+    boost::iostreams::filtering_istream in;
+    in.push(bio::gzip_decompressor());
+    in.push(file);
 
-    a = archive_read_new();
-    archive_read_support_filter_all(a);
-    archive_read_support_format_all(a);
-
-    if (archive_read_open_filename(a, file_name.c_str(), 10240) != ARCHIVE_OK)
-        exit(1);
-
-    if (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
-        la_int64_t  entry_size = archive_entry_size(entry);
-
-        if (archive_entry_filetype(entry) == AE_IFREG) {
-            char *buff = new char[entry_size];
-            archive_read_data(a, buff, entry_size);
-
-            ss << buff;
-
-            delete[] buff;
-        }
-    }
-
-    if (archive_read_free(a) != ARCHIVE_OK)
-        exit(1);
-
-    return ss.str();
+    return read_fasta(in);
 }
 
 bool is_valid_marker(const std::string& marker) {
@@ -127,11 +103,6 @@ std::vector<FastaRecord> read_fasta(Stream &stream)
 std::vector<FastaRecord> read_fasta_file(const std::string &file_name) {
     std::fstream file{file_name};
     return read_fasta<std::fstream>(file);
-}
-
-std::vector<FastaRecord> read_fasta_string(const std::string &text) {
-    std::stringstream stream{text};
-    return read_fasta<std::stringstream>(stream);
 }
 
 void write_result(

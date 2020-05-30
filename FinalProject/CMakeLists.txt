@@ -10,19 +10,20 @@ set(Boost_USE_MULTITHREAD       ON)
 set(Boost_USE_STATIC_LIBS       OFF)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-if(APPLE)
-    set(LibArchive_INCLUDE_DIR "/usr/local/opt/libarchive/lib")
-endif()
-
 find_package(
         Boost REQUIRED COMPONENTS
             locale
+            iostreams
             system
             thread
             filesystem)
+
 find_package(TBB        REQUIRED)
 find_package(Threads    REQUIRED)
-find_package(LibArchive REQUIRED)
+find_package(
+        ICU REQUIRED COMPONENTS
+            data i18n test
+            io tu uc)
 
 add_executable(
         ${PROJECT_NAME}
@@ -45,11 +46,12 @@ add_executable(
 target_include_directories(
         ${PROJECT_NAME} PUBLIC
             include
-            src)
+            src
+)
 
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
             ${Boost_LIBRARIES}
             ${ICU_LIBRARIES}
-            ${LibArchive_LIBRARIES}
-            ${TBB_IMPORTED_TARGETS})
+            ${TBB_IMPORTED_TARGETS}
+            Threads::Threads)

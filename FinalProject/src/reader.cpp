@@ -16,7 +16,7 @@ void SequenceReader::run() {
         auto path = fs::canonical(p).string();
         std::vector<FastaRecord> fasta;
         if (is_archive(path)) {
-            fasta = read_fasta_string(read_archive(path));
+            fasta = read_fasta_archive(path);
         } else if (is_fasta_file(path)) {
             fasta = read_fasta_file(path);
         } else {
