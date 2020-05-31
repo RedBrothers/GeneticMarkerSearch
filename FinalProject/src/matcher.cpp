@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "matcher.h"
+#include "reader.h"
 
 
 SequenceMatcher::SequenceMatcher(
@@ -17,7 +18,7 @@ void SequenceMatcher::run() {
     while(true) {
         while (!_q.try_pop(fasta));
 
-        if (fasta._id == "Vsio") {
+        if (fasta._id == READING_DONE) {
             while(!_q.try_push(fasta));
             break;
         }

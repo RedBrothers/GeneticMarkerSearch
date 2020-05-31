@@ -8,7 +8,6 @@
 #include "aho_corasick.h"
 #include "config.h"
 #include "program.h"
-#include "tbb/concurrent_queue.h"
 
 
 void print_usage(const std::string &binary_name) {
@@ -21,16 +20,12 @@ int main(int argc, char **argv)
         print_usage(std::string{argv[0]});
         return -1;
     }
-    std::locale     loc = boost::locale::generator().generate("en_US.UTF-8");
-    std::locale::global(loc);
+    std::locale::global(
+            boost::locale::generator().generate("en_US.UTF-8"));
 
     ConfigParser    cp{argv[1]};
-    size_t          n_matcher_threads{
-            static_cast<size_t>(std::stoi(cp.get("n_matcher_threads")))
-    };
-    size_t          max_queue_size{
-            static_cast<size_t>(std::stoi(cp.get("max_queue_size")))
-    };
+    size_t          n_matcher_threads{std::stoul(cp.get("n_matcher_threads"))};
+    size_t          max_queue_size{std::stoul(cp.get("max_queue_size"))};
     std::string     result_file{cp.get("result_file")};
     std::string     markers_file{cp.get("markers_file")};
     std::string     genomes_path{cp.get("genomes_path")};

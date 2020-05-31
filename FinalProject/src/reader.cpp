@@ -14,17 +14,16 @@ void SequenceReader::run() {
     for (auto& p : fs::recursive_directory_iterator(_dir)) {
         auto path = fs::canonical(p).string();
         std::vector<FastaRecord> fasta;
-        if (is_archive(path)) {
+        if (is_archive(path))
             fasta = read_fasta_archive(path);
-        } else if (is_fasta_file(path)) {
+        else if (is_fasta_file(path))
             fasta = read_fasta_file(path);
-        } else {
+        else
             continue;
-        }
 
         for (auto&& f : fasta)
             while(!_q.try_push(f));
     }
 
-    while(!_q.try_push(FastaRecord("Vsio", "")));
+    while(!_q.try_push(FastaRecord(READING_DONE)));
 }
