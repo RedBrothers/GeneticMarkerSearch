@@ -2,63 +2,59 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <boost/lexical_cast.hpp>
+#include <boost/locale.hpp>
 #include "utils.h"
 #include "aho_corasick.h"
-
+#include "config.h"
+#include "program.h"
 #include "tbb/concurrent_queue.h"
 
-typedef std::chrono::duration<float> float_seconds;
 
-
-template<typename Time>
-auto time_diff(Time t1, Time t2) {
-    return std::chrono::duration_cast<float_seconds>(t2 - t1).count();
+void print_usage(const std::string &binary_name) {
+    std::cout << "Usage: " << binary_name << " [config_file]" << std::endl;
 }
 
-int main(int argc, char **argv) {
-
-    size_t max_rows {10};
-    auto m_read_start = std::chrono::high_resolution_clock::now();
-    auto m_records = read_markers("../markers.csv", max_rows);
-    auto m_read_end = std::chrono::high_resolution_clock::now();
-
-    AhoCorasick ac;
-    std::vector<std::string> marker_ids {};
-    std::vector<std::string> markers {};
-    for (const auto& rec : m_records) {
-        marker_ids.push_back(rec._id);
-        markers.push_back(rec._marker);
+int main(int argc, char **argv)
+{
+    if (argc != 2) {
+        print_usage(std::string{argv[0]});
+        return -1;
     }
+    std::locale     loc = boost::locale::generator().generate("en_US.UTF-8");
+    std::locale::global(loc);
 
-    auto build_start = std::chrono::high_resolution_clock::now();
-    ac.set_patterns(markers);
-    auto build_end = std::chrono::high_resolution_clock::now();
+    ConfigParser    cp{argv[1]};
+    size_t          n_matcher_threads{
+            static_cast<size_t>(std::stoi(cp.get("n_matcher_threads")))
+    };
+    size_t          max_queue_size{
+            static_cast<size_t>(std::stoi(cp.get("max_queue_size")))
+    };
+    std::string     result_file{cp.get("result_file")};
+    std::string     markers_file{cp.get("markers_file")};
+    std::string     genomes_path{cp.get("genomes_path")};
+    bool            verbose{boost::lexical_cast<bool>(cp.get("verbose"))};
 
-    auto s_read_start = std::chrono::high_resolution_clock::now();
-    auto sequences = read_fasta_file("../sequence.fasta");
-    auto s_read_end = std::chrono::high_resolution_clock::now();
-
-    std::vector<std::string> sequence_ids {};
-    std::vector<std::vector<bool>> results {};
-
-    auto match_start = std::chrono::high_resolution_clock::now();
-    for (const auto& seq : sequences) {
-        sequence_ids.push_back(seq._id);
-        results.push_back(ac.match(seq._sequence));
+    if (verbose) {
+        std::cout
+            << "Configuration file " << argv[1] << ":" << std::endl
+            << "genomes_path=" << genomes_path << std::endl
+            << "markers_file=" << markers_file << std::endl
+            << "result_file=" << result_file << std::endl
+            << "n_matcher_threads=" << n_matcher_threads << std::endl
+            << "max_queue_size=" << max_queue_size << std::endl
+            << "verbose=" << verbose << std::endl;
     }
-    auto match_end = std::chrono::high_resolution_clock::now();
+    Program         program{
+        n_matcher_threads,
+        max_queue_size,
+        result_file,
+        markers_file,
+        genomes_path,
+        verbose
+    };
 
-    auto write_start = std::chrono::high_resolution_clock::now();
-    write_result("../result.csv", results, sequence_ids, marker_ids);
-    auto write_end = std::chrono::high_resolution_clock::now();
-
-    std:: cout
-            << std::setprecision(3) << std::fixed
-            << "Reading markers:   " << time_diff(m_read_start, m_read_end) << " seconds\n"
-            << "Building trie:     " << time_diff( build_start,  build_end) << " seconds\n"
-            << "Reading sequences: " << time_diff(s_read_start, s_read_end) << " seconds\n"
-            << "Matching patterns: " << time_diff( match_start,  match_end) << " seconds\n"
-            << "Writing results:   " << time_diff( write_start,  write_end) << " seconds\n";
-
+    program.run();
     return 0;
 }

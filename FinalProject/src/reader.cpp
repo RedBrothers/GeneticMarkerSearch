@@ -26,4 +26,6 @@ void SequenceReader::run() {
         for (auto&& f : fasta)
             while(!_q.try_push(f));
     }
+
+    while(!_q.try_push(FastaRecord("Vsio", "")));
 }
