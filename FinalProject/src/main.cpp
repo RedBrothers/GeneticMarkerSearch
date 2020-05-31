@@ -9,8 +9,6 @@
 #include "config.h"
 #include "program.h"
 
-#define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS 1
-
 
 void print_usage(const std::string &binary_name) {
     std::cout << "Usage: " << binary_name << " [config_file]" << std::endl;

@@ -125,3 +125,11 @@ void write_result(
         file << "\n";
     }
 }
+
+Time::stamp Time::now() {
+    return std::chrono::high_resolution_clock::now();
+}
+
+float Time::diff(Time::stamp t1, Time::stamp t2) {
+    return std::chrono::duration_cast<Time::delta>(t2 - t1).count();
+}

@@ -1,5 +1,4 @@
 #include "utils.h"
-#include "config.h"
 #include "program.h"
 #include <thread>
 #include <iomanip>

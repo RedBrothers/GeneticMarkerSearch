@@ -1,6 +1,8 @@
 #ifndef GENES_PROGRAM_H
 #define GENES_PROGRAM_H
 
+# define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS true
+
 #include <vector>
 #include <string>
 #include <tbb/concurrent_map.h>

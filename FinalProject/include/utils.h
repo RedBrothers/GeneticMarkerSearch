@@ -1,6 +1,5 @@
 #ifndef GENES_UTILS_H
 #define GENES_UTILS_H
-#include "typedefs.h"
 #include <vector>
 #include <string>
 #include <chrono>
@@ -37,19 +36,6 @@ std::vector<FastaRecord>    read_fasta_file(const std::string &file_name);
 std::vector<FastaRecord>    read_fasta_archive(const std::string &file_name);
 std::vector<MarkerRecord>   read_markers(const std::string& file_name, size_t max_rows = 0);
 
-namespace Time {
-    typedef std::chrono::duration<float> seconds;
-
-    template<typename Timestamp>
-    auto diff(Timestamp t1, Timestamp t2) {
-        return std::chrono::duration_cast<seconds>(t2 - t1).count();
-    }
-
-    auto now() {
-        return std::chrono::high_resolution_clock::now();
-    }
-}
-
 // writing AC results
 void write_result(
         const std::string                    &file_name,
@@ -68,5 +54,14 @@ const std::string FASTA_CHARS {"ACGTURYKMSWBDHVN"};
 constexpr char FASTA_COMMENT_START {';'};
 constexpr char FASTA_ID_START {'>'};
 constexpr char FASTA_ID_END {' '};
+
+// time utils
+namespace Time {
+    typedef std::chrono::time_point<std::chrono::high_resolution_clock> stamp;
+    typedef std::chrono::duration<float> delta;
+
+    stamp now();
+    float diff(stamp t1, stamp t2);
+}
 
 #endif //GENES_UTILS_H

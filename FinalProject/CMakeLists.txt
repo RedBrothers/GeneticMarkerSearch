@@ -25,7 +25,6 @@ add_executable(
         ${PROJECT_NAME}
             src/main.cpp
             include/config.h
-            include/typedefs.h
             src/config.cpp
             src/utils.cpp
             include/utils.h
