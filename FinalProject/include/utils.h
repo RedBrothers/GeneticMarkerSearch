@@ -3,6 +3,8 @@
 #include "typedefs.h"
 #include <vector>
 #include <string>
+#include <chrono>
+
 #define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS 1
 
 struct FastaRecord
@@ -45,6 +47,13 @@ bool                        is_csv_file(const std::string& file_name);
 bool                        is_text_file(const std::string& file_name);
 bool                        is_fasta_file(const std::string& file_name);
 
+typedef std::chrono::duration<float> float_seconds;
+
+template<typename Time>
+auto    time_diff(Time t1, Time t2) {
+    return std::chrono::duration_cast<float_seconds>(t2 - t1).count();
+}
+
 void                        write_result(
         const std::string                    &file_name,
         const std::vector<std::vector<bool>> &result,
@@ -56,5 +65,9 @@ const std::string FASTA_CHARS {"ACGTURYKMSWBDHVN"};
 constexpr char FASTA_COMMENT_START {';'};
 constexpr char FASTA_ID_START {'>'};
 constexpr char FASTA_ID_END {' '};
+
+
+
+
 
 #endif //GENES_UTILS_H

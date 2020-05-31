@@ -22,8 +22,11 @@ class Program {
 
     tbb::concurrent_bounded_queue<FastaRecord>          _q;
     tbb::concurrent_map<std::string, std::vector<bool>> _m;
+
+    bool                         _verbose;
+
 public:
-    Program(size_t n_matchers, size_t max_queue_size, std::string, std::string, std::string);
+    Program(size_t n_matchers, size_t max_queue_size, std::string, std::string, std::string, bool);
     void run();
 };
 
