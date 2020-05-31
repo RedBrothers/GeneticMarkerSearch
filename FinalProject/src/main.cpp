@@ -31,6 +31,10 @@ int main(int argc, char **argv)
     std::string     genomes_path{cp.get("genomes_path")};
     bool            verbose{boost::lexical_cast<bool>(cp.get("verbose"))};
 
+    if (num_threads < 2) {
+        throw "num_threads must be at least 2";
+    }
+
     if (verbose) {
         std::cout
             << "Configuration file " << argv[1] << ":" << std::endl

@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "program.h"
 #include <thread>
+#include <cassert>
 #include <iomanip>
 #include <iostream>
 
@@ -20,9 +21,7 @@ Program::Program(
         , _matchers{}
         , _verbose{verbose}
 {
-    if (num_threads < 2) {
-        throw "num_threads must be at least 2";
-    }
+    assert(num_threads >= 2);
     _q.set_capacity(max_queue_size);
     _matchers.reserve(num_threads);
     for (size_t i = 0; i < num_threads - 1; ++i)
