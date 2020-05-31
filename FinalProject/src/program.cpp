@@ -5,7 +5,7 @@
 #include <iostream>
 
 Program::Program(
-        size_t      num_matcher_threads,
+        size_t      num_threads,
         size_t      max_queue_size,
         std::string result_file,
         std::string markers_file,
@@ -20,8 +20,12 @@ Program::Program(
         , _matchers{}
         , _verbose{verbose}
 {
+    if (num_threads < 2) {
+        throw "num_threads must be at least 2";
+    }
     _q.set_capacity(max_queue_size);
-    for (size_t i = 0; i < num_matcher_threads; ++i)
+    _matchers.reserve(num_threads);
+    for (size_t i = 0; i < num_threads - 1; ++i)
         _matchers.emplace_back(_ac, _q, _m);
 }
 
@@ -52,6 +56,7 @@ void Program::run() {
 
     // launch matchers; maybe extract method?
     std::vector<std::thread> matcher_threads;
+    matcher_threads.reserve(_matchers.size() + 1);
     auto match_start = Time::now();
     for (auto& m : _matchers)
         matcher_threads.emplace_back(&SequenceMatcher::run, &m);
@@ -59,6 +64,10 @@ void Program::run() {
     // wait for threads to finish
     reader_thread.join();
     auto s_read_end = Time::now();
+
+    // redirect the new free thread
+    _matchers.emplace_back(_ac, _q, _m);
+    matcher_threads.emplace_back(&SequenceMatcher::run, &_matchers.back());
 
     for (auto& t : matcher_threads)
         t.join();

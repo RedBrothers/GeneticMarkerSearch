@@ -28,7 +28,7 @@ class Program {
     tbb::concurrent_map<std::string, std::vector<bool>> _m;
 
 public:
-    Program(size_t      num_matcher_threads,
+    Program(size_t      num_threads,
             size_t      max_queue_size,
             std::string result_file,
             std::string markers_file,
