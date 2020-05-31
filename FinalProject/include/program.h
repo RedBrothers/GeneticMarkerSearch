@@ -13,17 +13,26 @@
 
 
 class Program {
+
+    bool        _verbose;
+    std::string _result_file;
+    std::string _markers_file;
+
     AhoCorasick                  _ac;
     SequenceReader               _reader;
     std::vector<SequenceMatcher> _matchers;
 
-    std::string                  _result_file;
-    std::string                  _markers_file;
-
     tbb::concurrent_bounded_queue<FastaRecord>          _q;
     tbb::concurrent_map<std::string, std::vector<bool>> _m;
+
 public:
-    Program(size_t n_matchers, size_t max_queue_size, std::string, std::string, std::string);
+    Program(size_t      num_matcher_threads,
+            size_t      max_queue_size,
+            std::string result_file,
+            std::string markers_file,
+            std::string genomes_dir,
+            bool        verbose = false);
+
     void run();
 };
 

@@ -3,6 +3,8 @@
 #include "typedefs.h"
 #include <vector>
 #include <string>
+#include <chrono>
+
 #define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS 1
 
 struct FastaRecord
@@ -35,6 +37,13 @@ std::vector<FastaRecord>    read_fasta(Stream &stream);
 std::vector<FastaRecord>    read_fasta_file(const std::string &file_name);
 std::vector<FastaRecord>    read_fasta_archive(const std::string &file_name);
 std::vector<MarkerRecord>   read_markers(const std::string& file_name, size_t max_rows = 0);
+
+typedef std::chrono::duration<float> float_seconds;
+
+template<typename Time>
+auto    time_diff(Time t1, Time t2) {
+    return std::chrono::duration_cast<float_seconds>(t2 - t1).count();
+}
 
 // writing AC results
 void write_result(
