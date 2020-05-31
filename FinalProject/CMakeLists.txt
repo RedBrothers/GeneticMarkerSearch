@@ -48,6 +48,5 @@ target_include_directories(
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
             ${Boost_LIBRARIES}
-#            ${ICU_LIBRARIES}
             ${TBB_IMPORTED_TARGETS}
             Threads::Threads)
