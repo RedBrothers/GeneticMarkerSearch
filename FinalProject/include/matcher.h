@@ -1,6 +1,8 @@
 #ifndef GENES_MATCHER_H
 #define GENES_MATCHER_H
 
+# define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS true
+
 #include <tbb/concurrent_map.h>
 #include <tbb/concurrent_queue.h>
 

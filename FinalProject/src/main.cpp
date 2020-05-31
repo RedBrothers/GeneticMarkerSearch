@@ -24,12 +24,16 @@ int main(int argc, char **argv)
             boost::locale::generator().generate("en_US.UTF-8"));
 
     ConfigParser    cp{argv[1]};
-    size_t          n_matcher_threads{std::stoul(cp.get("n_matcher_threads"))};
+    size_t          num_threads{std::stoul(cp.get("num_threads"))};
     size_t          max_queue_size{std::stoul(cp.get("max_queue_size"))};
     std::string     result_file{cp.get("result_file")};
     std::string     markers_file{cp.get("markers_file")};
     std::string     genomes_path{cp.get("genomes_path")};
     bool            verbose{boost::lexical_cast<bool>(cp.get("verbose"))};
+
+    if (num_threads < 2) {
+        throw "num_threads must be at least 2";
+    }
 
     if (verbose) {
         std::cout
@@ -37,12 +41,12 @@ int main(int argc, char **argv)
             << "genomes_path=" << genomes_path << std::endl
             << "markers_file=" << markers_file << std::endl
             << "result_file=" << result_file << std::endl
-            << "n_matcher_threads=" << n_matcher_threads << std::endl
+            << "num_threads=" << num_threads << std::endl
             << "max_queue_size=" << max_queue_size << std::endl
             << "verbose=" << verbose << std::endl;
     }
     Program         program{
-        n_matcher_threads,
+        num_threads,
         max_queue_size,
         result_file,
         markers_file,
