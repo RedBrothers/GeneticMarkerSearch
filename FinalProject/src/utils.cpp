@@ -34,7 +34,7 @@ bool is_fasta_file(const std::string &file_name) {
     return has_any_of_extensions(file_name, {".fasta", ".fas", ".fna", ".faa", ".ffn"});
 }
 
-std::vector<FastaRecord> read_archive(const std::string &file_name) {
+std::vector<FastaRecord> read_fasta_archive(const std::string &file_name) {
     std::ifstream file(file_name, std::ios_base::in | std::ios_base::binary);
     boost::iostreams::filtering_istream in;
     in.push(bio::gzip_decompressor());
@@ -103,11 +103,6 @@ std::vector<FastaRecord> read_fasta(Stream &stream)
 std::vector<FastaRecord> read_fasta_file(const std::string &file_name) {
     std::fstream file{file_name};
     return read_fasta<std::fstream>(file);
-}
-
-std::vector<FastaRecord> read_fasta_string(const std::string &text) {
-    std::stringstream stream{text};
-    return read_fasta<std::stringstream>(stream);
 }
 
 void write_result(

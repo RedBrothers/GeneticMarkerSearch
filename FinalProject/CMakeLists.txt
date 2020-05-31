@@ -20,7 +20,10 @@ find_package(
 
 find_package(TBB        REQUIRED)
 find_package(Threads    REQUIRED)
-
+find_package(
+        ICU REQUIRED COMPONENTS
+            data i18n test
+            io tu uc)
 
 add_executable(
         ${PROJECT_NAME}
@@ -49,4 +52,6 @@ target_include_directories(
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
             ${Boost_LIBRARIES}
-            ${TBB_IMPORTED_TARGETS})
+            ${ICU_LIBRARIES}
+            ${TBB_IMPORTED_TARGETS}
+            Threads::Threads)

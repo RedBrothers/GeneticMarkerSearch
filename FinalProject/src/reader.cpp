@@ -4,7 +4,6 @@
 
 namespace fs = boost::filesystem;
 
-
 SequenceReader::SequenceReader(
         std::string dir,
         tbb::concurrent_bounded_queue<FastaRecord> &q)
@@ -16,7 +15,7 @@ void SequenceReader::run() {
         auto path = fs::canonical(p).string();
         std::vector<FastaRecord> fasta;
         if (is_archive(path)) {
-            fasta = read_archive(path);
+            fasta = read_fasta_archive(path);
         } else if (is_fasta_file(path)) {
             fasta = read_fasta_file(path);
         } else {
