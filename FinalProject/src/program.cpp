@@ -36,14 +36,17 @@ void Program::run() {
     auto markers = read_markers(_markers_file);
     auto m_read_end = Time::now();
 
-    std::vector<std::string> m_ids {}, patterns;
-    for (const auto& m : markers) {
-        m_ids.push_back(m._id);
-        patterns.push_back(m._marker);
+    std::vector<std::string> m_ids, patterns;
+    m_ids.reserve(markers.size());
+    patterns.reserve(markers.size());
+    for (auto &&m : markers) {
+        m_ids.push_back(std::move(m._id));
+        patterns.push_back(std::move(m._marker));
     }
+    markers.clear();
 
     auto build_start = Time::now();
-    _ac.set(patterns);
+    _ac.set(std::move(patterns));
     auto build_end = Time::now();
 
     //
@@ -76,11 +79,15 @@ void Program::run() {
     // save results to csv; maybe extract method?
     //
     std::vector<std::string> s_ids;
+    s_ids.reserve(_m.size());
     std::vector<std::vector<bool>> result;
-    for (auto& [id, res] : _m) {
-        s_ids.push_back(id);
-        result.push_back(res);
+    result.reserve(_m.size());
+    for (auto&& [id, res] : _m) {
+        s_ids.push_back(std::move(id));
+        result.push_back(std::move(res));
     }
+    _m.clear();
+
     auto write_start = Time::now();
     write_result(_result_file, result, s_ids, m_ids);
     auto write_end = Time::now();
