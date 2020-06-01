@@ -82,8 +82,8 @@ void Program::run() {
     s_ids.reserve(_m.size());
     std::vector<std::vector<bool>> result;
     result.reserve(_m.size());
-    for (auto&& [id, res] : _m) {
-        s_ids.push_back(std::move(id));
+    for (auto &&[id, res] : _m) {
+        s_ids.push_back(id);
         result.push_back(std::move(res));
     }
     _m.clear();
