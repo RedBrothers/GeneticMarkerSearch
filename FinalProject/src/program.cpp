@@ -43,7 +43,7 @@ void Program::run() {
     }
 
     auto build_start = Time::now();
-    _ac.set_patterns(patterns);
+    _ac.set(patterns);
     auto build_end = Time::now();
 
     //
