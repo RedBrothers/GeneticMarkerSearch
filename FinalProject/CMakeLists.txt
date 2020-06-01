@@ -40,8 +40,7 @@ add_executable(
 target_include_directories(
         ${PROJECT_NAME} PUBLIC
             include
-            src
-)
+            src)
 
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
