@@ -29,7 +29,6 @@ add_executable(
             src/utils.cpp
             include/utils.h
             include/aho_corasick.h
-            include/state.h
             src/aho_corasick.cpp
             src/program.cpp
             include/program.h
