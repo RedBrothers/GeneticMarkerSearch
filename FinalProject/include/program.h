@@ -36,6 +36,21 @@ public:
             bool        verbose = false);
 
     void run();
+
+private:
+    void prepare();
+    void execute();
+    void save();
+    void report() const;
+    void cleanup();
+
+    std::vector<std::string> _m_ids;
+
+    float _markers_reading_time {0.};
+    float _trie_building_time {0.};
+    float _genomes_reading_time {0.};
+    float _markers_matching_time {0.};
+    float _results_saving_time {0.};
 };
 
 #endif //GENES_PROGRAM_H

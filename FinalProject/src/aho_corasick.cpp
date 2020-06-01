@@ -1,11 +1,23 @@
 #include "aho_corasick.h"
 #include <queue>
 #include <iostream>
-#include <exception>
 
 
-void AhoCorasick::set_patterns(const std::vector<std::string> &patterns) {
+void AhoCorasick::set(const std::vector<std::string> &patterns) {
+    reset();
     _patterns = patterns;
+    construct();
+}
+
+
+void AhoCorasick::set(std::vector<std::string> &&patterns) {
+    reset();
+    _patterns = std::move(patterns);
+    construct();
+}
+
+
+void AhoCorasick::construct() {
     construct_trie();
     construct_failure();
     _set = true;
@@ -28,13 +40,12 @@ void AhoCorasick::validate() const {
 
 
 size_t AhoCorasick::g(size_t s, char c) const {
-    if (_states[s].has_key(c)) {
+    if (_states[s].has_key(c))
         return _states[s].next(c);
-    } else if (!_states[0].has_key(c)) {
+    else if (!_states[0].has_key(c))
         return 0;
-    } else {
+    else
         return -1;
-    }
 }
 
 
@@ -72,18 +83,20 @@ void AhoCorasick::construct_failure() {
         auto r = q.front(); q.pop();
         for (auto& [c, next] : _states[r].next()) {
             q.push(next);
-            if (r) {
-                s = _failure[r];
-                while (g(s, c) == -1)
-                    s = _failure[s];
-                _failure[next] = g(s, c);
 
-                auto indexes = _outputs[_failure[next]];
-                if (!indexes.empty())
-                    _outputs[next].insert(
-                            _outputs[next].end(),
-                            indexes.cbegin(), indexes.cend());
-            }
+            if (!r)
+                continue;
+
+            s = _failure[r];
+            while (g(s, c) == -1)
+                s = _failure[s];
+            _failure[next] = g(s, c);
+
+            auto indexes = _outputs[_failure[next]];
+            _outputs[next].insert(
+                    _outputs[next].end(),
+                    indexes.cbegin(),
+                    indexes.cend());
         }
     }
 }
