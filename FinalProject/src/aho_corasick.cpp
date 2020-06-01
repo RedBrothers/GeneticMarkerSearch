@@ -12,7 +12,7 @@ void AhoCorasick::set(const std::vector<std::string> &patterns) {
 
 void AhoCorasick::set(std::vector<std::string> &&patterns) {
     reset();
-    _patterns = patterns;
+    _patterns = std::move(patterns);
     construct();
 }
 
