@@ -108,18 +108,26 @@ void Program::save() {
     write_result(_result_file, result, s_ids, _m_ids);
     auto write_end = Time::now();
     _results_saving_time = Time::diff(write_start, write_end);
+
+    _num_genomes = s_ids.size();
+    _num_markers = _m_ids.size();
 }
 
 
 void Program::report() const {
     if (_verbose) {
         std::cout
+                << "Successfully executed for "
+                << _num_genomes << " genomes and "
+                << _num_markers << " markers.\n"
+                << "Results saved at " << _result_file << ".\n";
+        std::cout
                 << std::setprecision(3) << std::fixed
-                << "Reading markers:  " << _markers_reading_time << " seconds\n"
-                << "Building trie:    " << _trie_building_time << " seconds\n"
-                << "Reading genomes:  " << _genomes_reading_time << " seconds\n"
-                << "Matching markers: " << _markers_matching_time << " seconds\n"
-                << "Saving results:  " << _results_saving_time << " seconds\n";
+                << "\tReading markers:  " << _markers_reading_time << " seconds\n"
+                << "\tBuilding trie:    " << _trie_building_time << " seconds\n"
+                << "\tReading genomes:  " << _genomes_reading_time << " seconds\n"
+                << "\tMatching markers: " << _markers_matching_time << " seconds\n"
+                << "\tSaving results:   " << _results_saving_time << " seconds\n";
     }
 }
 
