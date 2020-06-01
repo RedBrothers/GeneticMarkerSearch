@@ -72,18 +72,20 @@ void AhoCorasick::construct_failure() {
         auto r = q.front(); q.pop();
         for (auto& [c, next] : _states[r].next()) {
             q.push(next);
-            if (r) {
-                s = _failure[r];
-                while (g(s, c) == -1)
-                    s = _failure[s];
-                _failure[next] = g(s, c);
 
-                auto indexes = _outputs[_failure[next]];
-                if (!indexes.empty())
-                    _outputs[next].insert(
-                            _outputs[next].end(),
-                            indexes.cbegin(), indexes.cend());
-            }
+            if (!r)
+                continue;
+
+            s = _failure[r];
+            while (g(s, c) == -1)
+                s = _failure[s];
+            _failure[next] = g(s, c);
+
+            auto indexes = _outputs[_failure[next]];
+            if (!indexes.empty())
+                _outputs[next].insert(
+                        _outputs[next].end(),
+                        indexes.cbegin(), indexes.cend());
         }
     }
 }
