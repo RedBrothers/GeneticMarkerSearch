@@ -17,7 +17,7 @@ public:
     SequenceReader(
             std::string dir,
             tbb::concurrent_bounded_queue<FastaRecord> &q,
-            tbb::concurrent_vector<std::string> &_e);
+            tbb::concurrent_vector<std::string> &e);
     void run();
 };
 
