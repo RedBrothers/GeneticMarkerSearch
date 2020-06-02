@@ -1,6 +1,8 @@
 #include "aho_corasick.h"
 #include <queue>
+#include <numeric>
 #include <iostream>
+#include <execution>
 
 
 void AhoCorasick::set(const std::vector<std::string> &patterns) {
@@ -50,9 +52,15 @@ size_t AhoCorasick::g(size_t s, char c) const {
 
 
 void AhoCorasick::construct_trie() {
+    auto max_states = std::transform_reduce(
+            std::execution::par,
+            _patterns.cbegin(), _patterns.cend(),
+            0, std::plus<size_t>{},
+            [](const std::string &s) { return s.length(); });
+    _states.reserve(max_states);
+
     size_t id {0};
     _states.emplace_back(id);
-
     for (auto it = _patterns.cbegin(); it != _patterns.cend(); ++it) {
         auto pattern = *it;
         size_t state = 0;
@@ -91,12 +99,10 @@ void AhoCorasick::construct_failure() {
             while (g(s, c) == -1)
                 s = _failure[s];
             _failure[next] = g(s, c);
-
-            auto indexes = _outputs[_failure[next]];
             _outputs[next].insert(
                     _outputs[next].end(),
-                    indexes.cbegin(),
-                    indexes.cend());
+                    _outputs[_failure[next]].cbegin(),
+                    _outputs[_failure[next]].cend());
         }
     }
 }

@@ -2,6 +2,7 @@
 #define GENES_AHO_CORASICK_H
 
 #include <map>
+#include <list>
 #include <string>
 #include <utility>
 #include <vector>
@@ -33,7 +34,7 @@ public:
 class AhoCorasick {
     std::map<
         size_t,
-        std::vector<size_t>
+        std::list<size_t>
         >                       _outputs;
     std::vector<State>          _states;
     std::map<size_t, size_t>    _failure;
