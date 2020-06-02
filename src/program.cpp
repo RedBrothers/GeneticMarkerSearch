@@ -116,27 +116,25 @@ void Program::save() {
 
 
 void Program::report() const {
-    if (_verbose) {
-        std::cout
-                << "Successfully executed for "
-                << _num_genomes << " genomes and "
-                << _num_markers << " markers.\n"
-                << "Results saved at " << _result_file << ".\n";
+    if (!_verbose) return;
+    std::cout
+            << "Successfully executed for "
+            << _num_genomes << " genomes and "
+            << _num_markers << " markers.\n"
+            << "Results saved at " << _result_file << ".\n";
 
-        std::cout
-                << std::setprecision(3) << std::fixed
-                << "\tReading markers:  " << _markers_reading_time << " seconds\n"
-                << "\tBuilding trie:    " << _trie_building_time << " seconds\n"
-                << "\tReading genomes:  " << _genomes_reading_time << " seconds\n"
-                << "\tMatching markers: " << _markers_matching_time << " seconds\n"
-                << "\tSaving results:   " << _results_saving_time << " seconds\n";
+    std::cout
+            << std::setprecision(3) << std::fixed
+            << "\tReading markers:  " << _markers_reading_time << " seconds\n"
+            << "\tBuilding trie:    " << _trie_building_time << " seconds\n"
+            << "\tReading genomes:  " << _genomes_reading_time << " seconds\n"
+            << "\tMatching markers: " << _markers_matching_time << " seconds\n"
+            << "\tSaving results:   " << _results_saving_time << " seconds\n";
 
-        if (!_e.empty()) {
-            std::cout << "During execution, the following errors occurred:\n";
-            for (const auto &e : _e) {
-                std::cout << "\t" << e << "\n";
-            }
-        }
+    if (!_e.empty()) {
+        std::cout << "During execution, the following errors occurred:\n";
+        for (const auto &e : _e)
+            std::cout << "\t" << e << "\n";
     }
 }
 
