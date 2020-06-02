@@ -1,6 +1,5 @@
-**.txt
-**.csv
-**.idea/
-**cmake-build-debug
-**cmake-build-release
+*.csv
+.idea/
+cmake-build-debug/
+cmake-build-release/
 data/
