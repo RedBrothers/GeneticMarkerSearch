@@ -5,15 +5,15 @@
 
 
 SequenceMatcher::SequenceMatcher(
-        AhoCorasick &ac,
-        tbb::concurrent_bounded_queue<FastaRecord> &q,
+        AhoCorasick                                         &ac,
+        tbb::concurrent_bounded_queue<FastaRecord>          &q,
         tbb::concurrent_map<std::string, std::vector<bool>> &m,
-        tbb::concurrent_vector<std::string> &e
-        )
-        : _ac{ac}
-        , _q{q}
-        , _m{m}
-        , _e{e} {}
+        tbb::concurrent_vector<std::string>                 &e)
+    : _ac{ac}
+    , _q{q}
+    , _m{m}
+    , _e{e} {}
+
 
 void SequenceMatcher::run() {
     FastaRecord fasta {};

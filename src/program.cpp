@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 
+
 Program::Program(
         size_t      num_threads,
         size_t      max_queue_size,
@@ -12,16 +13,15 @@ Program::Program(
         std::string markers_file,
         std::string genomes_path,
         bool        verbose)
-        : _ac{}
-        , _q{}
-        , _m{}
-        , _e{}
-        , _result_file{std::move(result_file)}
-        , _markers_file{std::move(markers_file)}
-        , _reader{std::move(genomes_path), _q, _e}
-        , _matchers{}
-        , _verbose{verbose}
-{
+    : _ac{}
+    , _q{}
+    , _m{}
+    , _e{}
+    , _result_file{std::move(result_file)}
+    , _markers_file{std::move(markers_file)}
+    , _reader{std::move(genomes_path), _q, _e}
+    , _matchers{}
+    , _verbose{verbose} {
     assert(num_threads >= 2);
     _q.set_capacity(max_queue_size);
     _matchers.reserve(num_threads);

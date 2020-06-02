@@ -10,10 +10,10 @@ namespace ba = boost::locale::boundary;
 namespace lc = boost::locale;
 namespace bio = boost::iostreams;
 
+
 bool has_any_of_extensions(
-        const std::string &file_name,
-        const std::vector<std::string> &extensions
-        ) {
+        const std::string              &file_name,
+        const std::vector<std::string> &extensions) {
     return std::find(
             extensions.begin(),
             extensions.end(),
@@ -21,35 +21,41 @@ bool has_any_of_extensions(
     ) != extensions.end();
 }
 
+
 bool is_archive(const std::string &file_name) {
     return has_any_of_extensions(file_name, {".zip", ".tar", ".tar.gz", ".gz", ".7z"});
 }
+
 
 bool is_csv_file(const std::string &file_name) {
     return has_any_of_extensions(file_name, {".csv"});
 }
 
+
 bool is_fasta_file(const std::string &file_name) {
     return has_any_of_extensions(file_name, {".fasta", ".fas", ".fna", ".faa", ".ffn"});
 }
+
 
 std::vector<FastaRecord> read_fasta_archive(const std::string &file_name) {
     std::ifstream file(file_name, std::ios_base::in | std::ios_base::binary);
     boost::iostreams::filtering_istream in;
     in.push(bio::gzip_decompressor());
     in.push(file);
-
     return read_fasta(in);
 }
+
 
 bool is_valid_marker(const std::string& marker) {
     return std::all_of(marker.cbegin(), marker.cend(),
             boost::is_any_of(FASTA_CHARS));
 }
 
+
 bool time_to_stop(size_t k, size_t max) {
     return max ? (k >= max) : false;
 }
+
 
 std::vector<MarkerRecord> read_markers(const std::string &file_name, size_t max_rows) {
     std::vector<MarkerRecord> records {};
@@ -68,9 +74,9 @@ std::vector<MarkerRecord> read_markers(const std::string &file_name, size_t max_
     return records;
 }
 
+
 template<typename Stream>
-std::vector<FastaRecord> read_fasta(Stream &stream)
-{
+std::vector<FastaRecord> read_fasta(Stream &stream) {
     std::vector<FastaRecord> records {};
     std::string              line;
     std::string              id;
@@ -99,17 +105,18 @@ std::vector<FastaRecord> read_fasta(Stream &stream)
     return records;
 }
 
+
 std::vector<FastaRecord> read_fasta_file(const std::string &file_name) {
     std::fstream file{file_name};
     return read_fasta<std::fstream>(file);
 }
 
+
 void write_result(
         const std::string                    &file_name,
         const std::vector<std::vector<bool>> &result,
         const std::vector<std::string>       &sequence_ids,
-        const std::vector<std::string>       &marker_ids)
-{
+        const std::vector<std::string>       &marker_ids) {
     assert(result.size() == sequence_ids.size());
     std::ofstream file{file_name};
 
@@ -125,9 +132,11 @@ void write_result(
     }
 }
 
+
 Time::stamp Time::now() {
     return std::chrono::high_resolution_clock::now();
 }
+
 
 float Time::diff(Time::stamp t1, Time::stamp t2) {
     return std::chrono::duration_cast<Time::delta>(t2 - t1).count();
