@@ -7,6 +7,7 @@
 #include <string>
 #include <tbb/concurrent_map.h>
 #include <tbb/concurrent_queue.h>
+#include <tbb/concurrent_vector.h>
 
 #include "utils.h"
 #include "reader.h"
@@ -24,6 +25,7 @@ class Program {
     SequenceReader               _reader;
     std::vector<SequenceMatcher> _matchers;
 
+    tbb::concurrent_vector<std::string>                 _e;
     tbb::concurrent_bounded_queue<FastaRecord>          _q;
     tbb::concurrent_map<std::string, std::vector<bool>> _m;
 
