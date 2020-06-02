@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 
+
 Program::Program(
         size_t      num_threads,
         size_t      max_queue_size,
@@ -20,8 +21,7 @@ Program::Program(
         , _markers_file{std::move(markers_file)}
         , _reader{std::move(genomes_path), _q, _e}
         , _matchers{}
-        , _verbose{verbose}
-{
+        , _verbose{verbose} {
     assert(num_threads >= 2);
     _q.set_capacity(max_queue_size);
     _matchers.reserve(num_threads);

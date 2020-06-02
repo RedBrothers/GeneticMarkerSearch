@@ -14,8 +14,8 @@ void print_usage(const std::string &binary_name) {
     std::cout << "Usage: " << binary_name << " [config_file]" << std::endl;
 }
 
-int main(int argc, char **argv)
-{
+
+int main(int argc, char **argv) {
     if (argc != 2) {
         print_usage(std::string{argv[0]});
         return -1;
@@ -39,14 +39,14 @@ int main(int argc, char **argv)
     if (verbose) {
         std::cout
             << "Configuration file " << argv[1] << ":" << std::endl
-            << "genomes_path=" << genomes_path << std::endl
-            << "markers_file=" << markers_file << std::endl
-            << "result_file=" << result_file << std::endl
-            << "num_threads=" << num_threads << std::endl
-            << "max_queue_size=" << max_queue_size << std::endl
-            << "verbose=" << verbose << std::endl;
+            << "\tgenomes_path=" << genomes_path << std::endl
+            << "\tmarkers_file=" << markers_file << std::endl
+            << "\tresult_file=" << result_file << std::endl
+            << "\tnum_threads=" << num_threads << std::endl
+            << "\tmax_queue_size=" << max_queue_size << std::endl
+            << "\tverbose=" << verbose << std::endl << std::endl;
     }
-    Program         program{
+    Program program {
         num_threads,
         max_queue_size,
         result_file,

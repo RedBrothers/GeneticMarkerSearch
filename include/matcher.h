@@ -19,10 +19,10 @@ class SequenceMatcher {
     tbb::concurrent_vector<std::string>                 &_e;
 public:
     SequenceMatcher(
-            AhoCorasick& ac,
-            tbb::concurrent_bounded_queue<FastaRecord> &q,
+            AhoCorasick&                                        ac,
+            tbb::concurrent_bounded_queue<FastaRecord>          &q,
             tbb::concurrent_map<std::string, std::vector<bool>> &m,
-            tbb::concurrent_vector<std::string> &e);
+            tbb::concurrent_vector<std::string>                 &e);
     void run();
 };
 

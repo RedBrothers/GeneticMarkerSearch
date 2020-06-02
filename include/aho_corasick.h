@@ -30,9 +30,7 @@ public:
 };
 
 
-class AhoCorasick
-{
-private:
+class AhoCorasick {
     std::map<
         size_t,
         std::vector<size_t>

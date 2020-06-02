@@ -74,14 +74,14 @@ void AhoCorasick::construct_failure() {
     std::queue<size_t> q;
 
     size_t s = 0;
-    for (auto& [_, next] : _states[s].next()) {
+    for (auto [_, next] : _states[s].next()) {
         q.push(next);
         _failure[next] = s;
     }
 
     while (!q.empty()) {
         auto r = q.front(); q.pop();
-        for (auto& [c, next] : _states[r].next()) {
+        for (auto [c, next] : _states[r].next()) {
             q.push(next);
 
             if (!r)
