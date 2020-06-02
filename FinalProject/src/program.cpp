@@ -15,9 +15,10 @@ Program::Program(
         : _ac{}
         , _q{}
         , _m{}
+        , _e{}
         , _result_file{std::move(result_file)}
         , _markers_file{std::move(markers_file)}
-        , _reader{std::move(genomes_path), _q}
+        , _reader{std::move(genomes_path), _q, _e}
         , _matchers{}
         , _verbose{verbose}
 {
@@ -25,7 +26,7 @@ Program::Program(
     _q.set_capacity(max_queue_size);
     _matchers.reserve(num_threads);
     for (size_t i = 0; i < num_threads - 1; ++i)
-        _matchers.emplace_back(_ac, _q, _m);
+        _matchers.emplace_back(_ac, _q, _m, _e);
 }
 
 
@@ -81,7 +82,7 @@ void Program::execute() {
     _genomes_reading_time = Time::diff(read_start, read_end);
 
     // redirect the new free thread
-    _matchers.emplace_back(_ac, _q, _m);
+    _matchers.emplace_back(_ac, _q, _m, _e);
     matcher_threads.emplace_back(&SequenceMatcher::run, &_matchers.back());
 
     // wait for matcher threads to finish
@@ -108,18 +109,34 @@ void Program::save() {
     write_result(_result_file, result, s_ids, _m_ids);
     auto write_end = Time::now();
     _results_saving_time = Time::diff(write_start, write_end);
+
+    _num_genomes = s_ids.size();
+    _num_markers = _m_ids.size();
 }
 
 
 void Program::report() const {
     if (_verbose) {
         std::cout
+                << "Successfully executed for "
+                << _num_genomes << " genomes and "
+                << _num_markers << " markers.\n"
+                << "Results saved at " << _result_file << ".\n";
+
+        std::cout
                 << std::setprecision(3) << std::fixed
-                << "Reading markers:  " << _markers_reading_time << " seconds\n"
-                << "Building trie:    " << _trie_building_time << " seconds\n"
-                << "Reading genomes:  " << _genomes_reading_time << " seconds\n"
-                << "Matching markers: " << _markers_matching_time << " seconds\n"
-                << "Saving results:  " << _results_saving_time << " seconds\n";
+                << "\tReading markers:  " << _markers_reading_time << " seconds\n"
+                << "\tBuilding trie:    " << _trie_building_time << " seconds\n"
+                << "\tReading genomes:  " << _genomes_reading_time << " seconds\n"
+                << "\tMatching markers: " << _markers_matching_time << " seconds\n"
+                << "\tSaving results:   " << _results_saving_time << " seconds\n";
+
+        if (!_e.empty()) {
+            std::cout << "During execution, the following errors occurred:\n";
+            for (const auto &e : _e) {
+                std::cout << "\t" << e << "\n";
+            }
+        }
     }
 }
 

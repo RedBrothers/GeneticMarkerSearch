@@ -32,7 +32,8 @@ int main(int argc, char **argv)
     bool            verbose{boost::lexical_cast<bool>(cp.get("verbose"))};
 
     if (num_threads < 2) {
-        throw "num_threads must be at least 2";
+        std::cout << "num_threads must be at least 2, received " << num_threads;
+        return -1;
     }
 
     if (verbose) {
