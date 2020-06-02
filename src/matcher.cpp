@@ -26,7 +26,7 @@ void SequenceMatcher::run() {
             break;
         }
         try {
-            auto result = std::move(_ac.match(fasta._sequence));
+            auto result = _ac.match(fasta._sequence);
             _m[fasta._id] = result;
         } catch (std::exception &e) {
             _e.push_back("Error matching genome " + fasta._id + ": " + e.what());

@@ -42,7 +42,7 @@ void Program::run() {
 void Program::prepare() {
     // read markers
     auto read_start = Time::now();
-    auto markers = std::move(read_markers(_markers_file));
+    auto markers = read_markers(_markers_file);
     auto read_end = Time::now();
     _markers_reading_time = Time::diff(read_start, read_end);
 
