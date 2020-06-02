@@ -13,15 +13,15 @@ Program::Program(
         std::string markers_file,
         std::string genomes_path,
         bool        verbose)
-    : _ac{}
-    , _q{}
-    , _m{}
-    , _e{}
-    , _result_file{std::move(result_file)}
-    , _markers_file{std::move(markers_file)}
-    , _reader{std::move(genomes_path), _q, _e}
-    , _matchers{}
-    , _verbose{verbose} {
+        : _ac{}
+        , _q{}
+        , _m{}
+        , _e{}
+        , _result_file{std::move(result_file)}
+        , _markers_file{std::move(markers_file)}
+        , _reader{std::move(genomes_path), _q, _e}
+        , _matchers{}
+        , _verbose{verbose} {
     assert(num_threads >= 2);
     _q.set_capacity(max_queue_size);
     _matchers.reserve(num_threads);
@@ -42,7 +42,7 @@ void Program::run() {
 void Program::prepare() {
     // read markers
     auto read_start = Time::now();
-    auto markers = read_markers(_markers_file);
+    auto markers = std::move(read_markers(_markers_file));
     auto read_end = Time::now();
     _markers_reading_time = Time::diff(read_start, read_end);
 

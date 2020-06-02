@@ -10,9 +10,9 @@ SequenceReader::SequenceReader(
         std::string                                dir,
         tbb::concurrent_bounded_queue<FastaRecord> &q,
         tbb::concurrent_vector<std::string>        &e)
-    : _dir {std::move(dir)}
-    , _q {q}
-    , _e {e} {}
+        : _dir {std::move(dir)}
+        , _q {q}
+        , _e {e} {}
 
 
 void SequenceReader::run() {
