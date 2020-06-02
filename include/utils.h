@@ -5,8 +5,7 @@
 #include <chrono>
 
 
-struct FastaRecord
-{
+struct FastaRecord {
     std::string _id{};
     std::string _sequence{};
 
@@ -14,11 +13,10 @@ struct FastaRecord
             std::string id = "",
             std::string sequence = "")
         : _id{std::move(id)}
-        , _sequence{std::move(sequence)} {};
+        , _sequence{std::move(sequence)} {}
 };
 
-struct MarkerRecord
-{
+struct MarkerRecord {
     std::string _id{};
     std::string _marker{};
 
@@ -26,7 +24,7 @@ struct MarkerRecord
             std::string id = "",
             std::string marker = "")
         : _id{std::move(id)}
-        , _marker{std::move(marker)} {};
+        , _marker{std::move(marker)} {}
 };
 
 // reading genomes and markers
