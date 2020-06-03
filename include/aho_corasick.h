@@ -46,6 +46,12 @@ public:
     void set(const std::vector<std::string> &patterns);
     void set(std::vector<std::string> &&patterns);
     [[nodiscard]] std::vector<bool> match(const std::string &text) const;
+    void load_trie(const std::string &trie_file,
+                   const std::string &failure_file,
+                   const std::string &outputs_file);
+    void save_trie(const std::string &trie_file,
+                   const std::string &failure_file,
+                   const std::string &outputs_file) const;
     void reset();
 private:
     bool _set;

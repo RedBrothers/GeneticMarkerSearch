@@ -1,7 +1,8 @@
 #include "aho_corasick.h"
 #include <queue>
 #include <numeric>
-#include <iostream>
+#include <fstream>
+#include <sstream>
 
 
 void AhoCorasick::set(const std::vector<std::string> &patterns) {
@@ -122,4 +123,63 @@ std::vector<bool> AhoCorasick::match(const std::string &text) const {
     }
 
     return matches;
+}
+
+
+void AhoCorasick::load_trie(
+        const std::string &trie_file_name,
+        const std::string &failure_file_name,
+        const std::string &outputs_file_name) {
+
+    reset();
+    char c;
+    size_t num_states, s, n;
+
+    // read trie
+    std::ifstream trie_file {trie_file_name};
+    trie_file >> num_states;
+    _states.reserve(num_states);
+    for (size_t id = 0; id < num_states; ++id)
+        _states.emplace_back(id);
+    while (trie_file >> s >> c >> n)
+        _states[s].set_next(c, n);
+
+    // read failure
+    std::ifstream failure_file {failure_file_name};
+    while (failure_file >> s >> n)
+        _failure[s] = n;
+
+    // read outputs
+    std::ifstream outputs_file {outputs_file_name};
+    while (outputs_file >> s >> n)
+        _outputs[s].push_back(n);
+
+    _set = true;
+}
+
+
+void AhoCorasick::save_trie(
+        const std::string &trie_file_name,
+        const std::string &failure_file_name,
+        const std::string &outputs_file_name) const {
+
+    validate();
+
+    // save trie
+    std::ofstream trie_file {trie_file_name};
+    trie_file << _states.size() << std::endl;
+    for (const auto &s : _states)
+        for (const auto &[c, n] : s.next())
+            trie_file << s.id() << " " << c << " " << n << std::endl;
+
+    // save failure
+    std::ofstream failure_file {failure_file_name};
+    for (const auto &[s, n] : _failure)
+        failure_file << s << " " << n << std::endl;
+
+    // save outputs
+    std::ofstream outputs_file {outputs_file_name};
+    for (const auto& [s, list] : _outputs)
+        for (const auto &e : list)
+            outputs_file << s << " " << e << std::endl;
 }
