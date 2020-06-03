@@ -2,7 +2,6 @@
 #include <queue>
 #include <numeric>
 #include <iostream>
-#include <execution>
 
 
 void AhoCorasick::set(const std::vector<std::string> &patterns) {
@@ -53,7 +52,6 @@ size_t AhoCorasick::g(size_t s, char c) const {
 
 void AhoCorasick::construct_trie() {
     auto max_states = std::transform_reduce(
-            std::execution::par,
             _patterns.cbegin(), _patterns.cend(),
             0, std::plus<size_t>{},
             [](const std::string &s) { return s.length(); });
