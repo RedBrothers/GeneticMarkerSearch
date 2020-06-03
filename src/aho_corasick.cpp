@@ -181,7 +181,7 @@ void AhoCorasick::save_trie(
 
     // save outputs
     std::ofstream outputs_file {outputs_file_name};
-    for (const auto& [s, list] : _outputs)
+    for (const auto &[s, list] : _outputs)
         for (const auto &e : list)
             outputs_file << s << " " << e << std::endl;
 }
