@@ -20,6 +20,8 @@ void AhoCorasick::set(std::vector<std::string> &&patterns) {
 
 
 void AhoCorasick::construct() {
+    if (_patterns.empty())
+        throw PatternsNotSetException();
     construct_trie();
     construct_failure();
     _set = true;
@@ -36,7 +38,7 @@ void AhoCorasick::reset() {
 
 
 void AhoCorasick::validate() const {
-    if (!_set || _patterns.empty())
+    if (!_set)
         throw PatternsNotSetException();
 }
 
