@@ -2,6 +2,7 @@
 #define GENES_AHO_CORASICK_H
 
 #include <map>
+#include <list>
 #include <string>
 #include <utility>
 #include <vector>
@@ -30,12 +31,10 @@ public:
 };
 
 
-class AhoCorasick
-{
-private:
+class AhoCorasick {
     std::map<
         size_t,
-        std::vector<size_t>
+        std::list<size_t>
         >                       _outputs;
     std::vector<State>          _states;
     std::map<size_t, size_t>    _failure;
@@ -47,6 +46,12 @@ public:
     void set(const std::vector<std::string> &patterns);
     void set(std::vector<std::string> &&patterns);
     [[nodiscard]] std::vector<bool> match(const std::string &text) const;
+    void load_trie(const std::string &trie_file,
+                   const std::string &failure_file,
+                   const std::string &outputs_file);
+    void save_trie(const std::string &trie_file,
+                   const std::string &failure_file,
+                   const std::string &outputs_file) const;
     void reset();
 private:
     bool _set;

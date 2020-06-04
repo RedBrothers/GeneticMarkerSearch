@@ -7,13 +7,13 @@ namespace fs = boost::filesystem;
 
 
 SequenceReader::SequenceReader(
-        std::string dir,
+        std::string                                dir,
         tbb::concurrent_bounded_queue<FastaRecord> &q,
-        tbb::concurrent_vector<std::string> &e
-        )
+        tbb::concurrent_vector<std::string>        &e)
         : _dir {std::move(dir)}
         , _q {q}
         , _e {e} {}
+
 
 void SequenceReader::run() {
     for (auto& p : fs::recursive_directory_iterator(_dir)) {
