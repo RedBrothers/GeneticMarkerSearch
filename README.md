@@ -6,7 +6,7 @@ Genomes data: https://1001genomes.org/data/GMI-MPI/releases/v3.1/pseudogenomes/f
 
 ## Load Data
 
-To download data use `load_data.py`
+To download data use script `load_data.py`
 
 ```bash
 python3 load_data.py --n N --out-dir OUT_DIR
