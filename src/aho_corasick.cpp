@@ -1,6 +1,5 @@
 #include "aho_corasick.h"
 #include <queue>
-#include <numeric>
 #include <fstream>
 #include <sstream>
 
