@@ -11,3 +11,7 @@ Pseudogenomes data that we used for testing can be found [here](https://1001geno
 Every loaded file is a `.gz` archive containing one multi-FASTA file.
 
 Unfortunately, markers we used are not available for public use, but we provide a `sample_markers.csv` [file](https://gist.github.com/lekhovitsky/72744a626b610d10153d71ee44d0927e) with random markers for basic testing.
+
+## Requirements
+
+The program mostly relies on basic C++ 17 functionality, but uses some third-party libraries. Particularly, `boost` is used for various file manipulations, and Intel's `TBB` for efficient concurrent data structures. Including `TBB` into the project might be tricky on certain systems, and we provide a `FindTBB.cmake` file which solves this problem.
