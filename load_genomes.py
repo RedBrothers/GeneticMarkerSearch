@@ -24,8 +24,8 @@ def load_genomes(dest: str, n: int = 0):
     n = min(len(urls), n) if n > 0 else len(urls)
 
     if not os.path.exists(dest):
+        print(f"Path {dest} doesn't exist. Creating...")
         os.makedirs(dest)
-        print(f"Past {dest} doesn't exist. Creating...")
 
     for url in tqdm(urls[:n]):
         p = os.path.join(dest, url.split('/')[-1])
