@@ -10,4 +10,4 @@ Pseudogenomes data that we used for testing can be found [here](https://1001geno
 ```
 Every loaded file is a `.gz` archive containing one multi-FASTA file.
 
-Markers we used are not available for public use, but we attached multiple `sample-markers-{N}.csv` files with random markers of different size for reproducibility.
+Unfortunately, markers we used are not available for public use, but we provide a `sample-markers.csv` file with random markers for basic testing.
