@@ -54,10 +54,10 @@ size_t AhoCorasick::g(size_t s, char c) const {
 
 
 void AhoCorasick::construct_trie() {
-    auto max_states = std::transform_reduce(
-            _patterns.cbegin(), _patterns.cend(),
-            0, std::plus<size_t>{},
-            [](const std::string &s) { return s.length(); });
+    size_t max_states {0};
+    for (const auto &p : _patterns) {
+        max_states += p.length();
+    }
     _states.reserve(max_states);
 
     size_t id {0};
