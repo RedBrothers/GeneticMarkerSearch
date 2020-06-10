@@ -10,6 +10,20 @@ The main matching part is designed as a producer-consumer pipeline, with one thr
 
 ## Usage
 
+After building the project, navigate to the folder with the executable and run:
+```bash
+./GeneticMarkerSearch CONFIG_FILE
+```
+`CONFIG_FILE_PATH` must be a valid config file, like `config.dat` in this repository, which specifies the following values:
+- `genomes_path`: path to a folder with genome files (either `.fasta` files or archives containing a single `.fasta` file each).
+- `markers_file`: path to a `.csv` file with markers to find in genomes.
+- `result_file`: path to a `.csv` file to store the result at.
+- `num_threads`: number of parallel workers (must be at least 2).
+- `max_queue_size`: the maximum number of genomes to keep in memory at the same time. Set this based on your RAM. For example, each `.fasta` file we use is around 120MB, and contains 5 genomes. So if we don't want the genomes to take more than, say, 1.2GB of memory, we should set `max_queue_size` to 1200 / 120 * 5 = 50.
+- `verbose`: set to 1 to display progress and status messages and to 0 otherwise.
+
+The result is a CSV file with genome IDs as rows, marker IDs as columns, and 1's or 0's on the intersetion representing whether a given marker is found in a given genome.
+
 ## Data
 
 Pseudogenomes data that we used for testing can be found [here](https://1001genomes.org/data/GMI-MPI/releases/v3.1/pseudogenomes/fasta/). We've prepared a script `load_genomes.py` to load the required number of files. To load `NUM_FILES` files and store them at `DEST_DIR`, execute
