@@ -19,7 +19,7 @@ After building the project, navigate to the folder with the executable and run:
 - `markers_file`: path to a `.csv` file with markers to find in genomes.
 - `result_file`: path to a `.csv` file to store the result at.
 - `num_threads`: number of parallel workers (must be at least 2).
-- `max_queue_size`: the maximum number of genomes to keep in memory at the same time. Set this based on your RAM. For example, each `.fasta` file we use is around 120MB, and contains 5 genomes. So if we don't want the genomes to take more than, say, 1.2GB of memory, we should set `max_queue_size` to 1200 / 120 * 5 = 50.
+- `max_queue_size`: the maximum number of genomes to keep in memory at the same time. Set this based on your RAM restrictions. For example, each `.fasta` file we use is around 120MB, and contains 5 genomes. So if we don't want the genomes to take more than, say, 1.2GB of memory, we should set `max_queue_size` to 1200 / 120 * 5 = 50.
 - `verbose`: set to 1 to display progress and status messages and to 0 otherwise.
 
 The result is a CSV file with genome IDs as rows, marker IDs as columns, and 1's or 0's on the intersetion representing whether a given marker is found in a given genome.
