@@ -1,12 +1,12 @@
 #ifndef GENES_AHO_CORASICK_H
 #define GENES_AHO_CORASICK_H
 
-#include <map>
 #include <list>
 #include <string>
 #include <utility>
 #include <vector>
 #include <exception>
+#include <unordered_map>
 
 
 struct PatternsNotSetException : public std::exception {
@@ -18,7 +18,7 @@ struct PatternsNotSetException : public std::exception {
 
 class State {
     size_t                 _id;
-    std::map<char, size_t> _next;
+    std::unordered_map<char, size_t> _next;
 public:
     explicit State(size_t id = 0) : _id {id} {}
     ~State() { _next.clear(); }
@@ -26,18 +26,20 @@ public:
     [[nodiscard]] size_t id() const { return _id; }
     [[nodiscard]] bool has_key(char c) const { return _next.count(c); }
     [[nodiscard]] size_t next(char c) const { return _next.at(c); }
-    [[nodiscard]] std::map<char, size_t> next() const { return _next; }
+    [[nodiscard]] const std::unordered_map<char, size_t>& next() const { return _next; }
     void set_next(char c, const size_t& s) { _next[c] = s; }
 };
 
 
 class AhoCorasick {
-    std::map<
+    std::unordered_map<
         size_t,
         std::list<size_t>
         >                       _outputs;
+    std::unordered_map<
+        size_t, size_t
+        >                       _failure;
     std::vector<State>          _states;
-    std::map<size_t, size_t>    _failure;
     std::vector<std::string>    _patterns;
 public:
     AhoCorasick() : _set{ false } { reset(); }
