@@ -18,6 +18,7 @@ find_package(
             thread
             filesystem)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 find_package(TBB        REQUIRED)
 find_package(Threads    REQUIRED)
 
@@ -45,5 +46,5 @@ target_include_directories(
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
             ${Boost_LIBRARIES}
-            ${TBB_IMPORTED_TARGETS}
-            Threads::Threads)
+            Threads::Threads
+            TBB::tbb)
