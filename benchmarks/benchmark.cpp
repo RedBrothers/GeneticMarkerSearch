@@ -16,6 +16,7 @@ void test_build_and_match(size_t num_markers) {
     auto t1 = Time::now();
     for (const auto &m : markers)
         trie.insert(m);
+    trie.finalize();
     auto t2 = Time::now();
     std::cout << "Trie built in " << Time::diff(t1, t2) << " seconds" << std::endl;
 

@@ -50,6 +50,7 @@ void Program::prepare() {
     auto build_start = Time::now();
     for (const auto &m : _markers)
         _ac.insert(m);
+    _ac.finalize();
     auto build_end = Time::now();
     _trie_building_time = Time::diff(build_start, build_end);
 }
@@ -73,8 +74,8 @@ void Program::execute() {
     _genomes_reading_time = Time::diff(read_start, read_end);
 
     // redirect the new free thread
-    _matchers.emplace_back(_ac, _q, _m, _e);
-    matcher_threads.emplace_back(&SequenceMatcher::run, &_matchers.back());
+    //_matchers.emplace_back(_ac, _q, _m, _e);
+    //matcher_threads.emplace_back(&SequenceMatcher::run, &_matchers.back());
 
     // wait for matcher threads to finish
     for (auto& t : matcher_threads)

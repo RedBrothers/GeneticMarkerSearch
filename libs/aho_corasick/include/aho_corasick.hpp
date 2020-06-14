@@ -482,8 +482,12 @@ namespace aho_corasick {
             return token_collection(tokens);
         }
 
-        emit_collection parse_text(string_type text) {
+        void finalize() {
             check_construct_failure_states();
+        }
+
+        emit_collection parse_text(string_type text) const {
+            // if (!d_constructed_failure_states) throw;
             size_t pos = 0;
             state_ptr_type cur_state = d_root.get();
             emit_collection collected_emits;
