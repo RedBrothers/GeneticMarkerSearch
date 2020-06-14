@@ -117,12 +117,12 @@ void write_result(
         const std::string                    &file_name,
         const std::vector<std::vector<bool>> &result,
         const std::vector<std::string>       &sequence_ids,
-        const std::vector<std::string>       &marker_ids) {
+        const std::vector<std::string>       &markers) {
     assert(result.size() == sequence_ids.size());
     std::ofstream file{file_name};
 
-    for (const auto& id : marker_ids)
-        file << "," << id;
+    for (const auto& m : markers)
+        file << "," << m;
     file << "\n";
 
     for (size_t j = 0; j < sequence_ids.size(); ++j) {

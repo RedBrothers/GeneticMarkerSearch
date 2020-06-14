@@ -8,7 +8,7 @@ namespace fs = boost::filesystem;
 
 SequenceReader::SequenceReader(
         std::string                                dir,
-        tbb::concurrent_bounded_queue<Fasta> &q,
+        tbb::concurrent_bounded_queue<Fasta>       &q,
         tbb::concurrent_vector<std::string>        &e)
         : _dir {std::move(dir)}
         , _q {q}
