@@ -49,10 +49,10 @@ Since we have genomes of different size, we take an average matching time of 5 g
 The results on Intel Core i5 7200U processor with 2.5GHz are the following (min across 3 runs): 
 
 | # markers  |  trie (ahocorapy)  | trie (C++) | matching (ahocorapy) |  matching (C++)  |
-|---|---:|---:|---:|---:|
-| 10^3  |   |  0.02s |   |  7.4s |
-| 10^4  |   |  0.14s |   |  8.9s |
-| 10^5  |   |  1.76s |   | 12.7s |
-| 10^6  |   | 30.04s |   | 17.9s |
+|------|------:|-------:|------:|------:|
+| 10^3 | 0.06s |  0.02s | 29.2s |  7.4s |
+| 10^4 | 0.45s |  0.14s | 33.9s |  8.9s |
+| 10^5 | 4.44s |  1.76s | 39.9s | 12.7s |
+| 10^6 | 80.0s | 30.04s | 50.0s | 17.9s |
 
 The second test is measurement of the effect of parallelization by running the main executable on different numbers of cores.
