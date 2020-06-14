@@ -38,7 +38,7 @@ Unfortunately, markers we used are not available for public use, but we provide 
 
 The program mostly relies on basic C++ 17 functionality, but uses some third-party libraries. Particularly, `boost` is used for various file manipulations, and Intel's `TBB` for efficient concurrent data structures. Including `TBB` into the project might be tricky on certain systems, so we provide a `FindTBB.cmake` file (not our work) which solves this problem.
 
-Our implementation of Aho-Corasick turned out to be not very efficient, so we replaced it with [this one](https://github.com/cjgdev/aho_corasick). We did small adjustments o make it work in parallel manner. 
+Our implementation of Aho-Corasick turned out to be not very efficient, so we replaced it with [this](https://github.com/cjgdev/aho_corasick) one. We did small adjustments to make it work in parallel manner. 
 
 ## Performance
 
