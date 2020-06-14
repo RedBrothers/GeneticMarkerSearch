@@ -14,18 +14,18 @@ void test_build_and_match(size_t num_markers) {
     aho_corasick::trie trie;
     std::cout << "Number of markers: " << num_markers << std::endl;
     auto t1 = Time::now();
-    for (auto& m : markers)
-        trie.insert(m._marker);
+    for (const auto &m : markers)
+        trie.insert(m);
     auto t2 = Time::now();
     std::cout << "Trie built in " << Time::diff(t1, t2) << " seconds" << std::endl;
 
     for (const auto &s : sequences) {
         auto t3 = Time::now();
-        auto result = trie.parse_text(s._sequence);
+        auto result = trie.parse_text(s.seq);
         auto t4 = Time::now();
         auto it = std::unique(result.begin(), result.end());
         std::cout
-                << s._id
+                << s.id
                 << " matched in " << Time::diff(t3, t4) << " seconds, "
                 << "found " << std::distance(result.begin(), it) << " matches." <<  std::endl;
     }

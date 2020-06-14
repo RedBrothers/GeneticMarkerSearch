@@ -1,5 +1,5 @@
-SET(APP_NAME search)
-set(LIB_NAME search_lib)
+SET(APP_NAME run_search)
+set(LIB_NAME search)
 
 set(Boost_USE_MULTITHREAD       ON)
 set(Boost_USE_STATIC_LIBS       OFF)

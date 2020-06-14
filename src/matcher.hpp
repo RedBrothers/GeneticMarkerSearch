@@ -3,6 +3,10 @@
 
 # define TBB_PREVIEW_CONCURRENT_ORDERED_CONTAINERS true
 
+#include <set>
+#include <vector>
+#include <string>
+
 #include <tbb/concurrent_map.h>
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_vector.h>
@@ -14,15 +18,15 @@
 class SequenceMatcher {
     aho_corasick::trie &_ac;
 
-    tbb::concurrent_bounded_queue<FastaRecord>          &_q;
-    tbb::concurrent_map<std::string, std::vector<bool>> &_m;
-    tbb::concurrent_vector<std::string>                 &_e;
+    tbb::concurrent_bounded_queue<Fasta>               &_q;
+    tbb::concurrent_map<std::string, std::set<size_t>> &_m;
+    tbb::concurrent_vector<std::string>                &_e;
 public:
     SequenceMatcher(
-            aho_corasick::trie                                  &ac,
-            tbb::concurrent_bounded_queue<FastaRecord>          &q,
-            tbb::concurrent_map<std::string, std::vector<bool>> &m,
-            tbb::concurrent_vector<std::string>                 &e);
+            aho_corasick::trie                                 &ac,
+            tbb::concurrent_bounded_queue<Fasta>               &q,
+            tbb::concurrent_map<std::string, std::set<size_t>> &m,
+            tbb::concurrent_vector<std::string>                &e);
     void run();
 };
 
