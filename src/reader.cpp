@@ -1,14 +1,14 @@
-#include <boost/filesystem.hpp>
-#include "utils.h"
-#include "reader.h"
+#include <utils.hpp>
+#include <reader.hpp>
 #include <exception>
+#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 
 
 SequenceReader::SequenceReader(
         std::string                                dir,
-        tbb::concurrent_bounded_queue<FastaRecord> &q,
+        tbb::concurrent_bounded_queue<Fasta>       &q,
         tbb::concurrent_vector<std::string>        &e)
         : _dir {std::move(dir)}
         , _q {q}
@@ -18,7 +18,7 @@ SequenceReader::SequenceReader(
 void SequenceReader::run() {
     for (auto& p : fs::recursive_directory_iterator(_dir)) {
         auto path = fs::canonical(p).string();
-        std::vector<FastaRecord> fasta;
+        std::vector<Fasta> fasta;
         try {
             if (is_archive(path))
                 fasta = read_fasta_archive(path);
@@ -34,5 +34,5 @@ void SequenceReader::run() {
             while(!_q.try_push(f));
     }
 
-    while(!_q.try_push(FastaRecord(READING_DONE)));
+    while(!_q.try_push(Fasta(READING_DONE)));
 }

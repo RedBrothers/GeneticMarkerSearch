@@ -1,4 +1,4 @@
-#include "../include/config.h"
+#include <config.hpp>
 
 
 ConfigParser::ConfigParser(const std::string& filename) {

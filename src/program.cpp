@@ -1,5 +1,5 @@
-#include "utils.h"
-#include "program.h"
+#include <utils.hpp>
+#include <program.hpp>
 #include <thread>
 #include <cassert>
 #include <iomanip>
@@ -42,23 +42,15 @@ void Program::run() {
 void Program::prepare() {
     // read markers
     auto read_start = Time::now();
-    auto markers = read_markers(_markers_file);
+    _markers = read_markers(_markers_file);
     auto read_end = Time::now();
     _markers_reading_time = Time::diff(read_start, read_end);
 
-    // save marker ids, prepare patterns
-    std::vector<std::string> patterns;
-    _m_ids.reserve(markers.size());
-    patterns.reserve(markers.size());
-    for (auto &&m : markers) {
-        _m_ids.push_back(std::move(m._id));
-        patterns.push_back(std::move(m._marker));
-    }
-    markers.clear();
-
     // prepare Aho-Corasick trie
     auto build_start = Time::now();
-    _ac.set(std::move(patterns));
+    for (const auto &m : _markers)
+        _ac.insert(m);
+    _ac.finalize();
     auto build_end = Time::now();
     _trie_building_time = Time::diff(build_start, build_end);
 }
@@ -89,29 +81,32 @@ void Program::execute() {
     for (auto& t : matcher_threads)
         t.join();
     auto match_end = Time::now();
-    _markers_matching_time = Time::diff(match_start, match_end);
+    _genomes_matching_time = Time::diff(match_start, match_end);
 }
 
 
 void Program::save() {
     // extract results from our map
-    std::vector<std::string> s_ids;
-    s_ids.reserve(_m.size());
+    std::vector<std::string> seq_ids;
+    seq_ids.reserve(_m.size());
     std::vector<std::vector<bool>> result;
     result.reserve(_m.size());
     for (auto &&[id, res] : _m) {
-        s_ids.push_back(id);
-        result.push_back(std::move(res));
+        seq_ids.push_back(id);
+        std::vector<bool> v(_markers.size(), false);
+        for (auto idx : res)
+            v[idx] = true;
+        result.push_back(std::move(v));
     }
 
     // save results
     auto write_start = Time::now();
-    write_result(_result_file, result, s_ids, _m_ids);
+    write_result(_result_file, result, seq_ids, _markers);
     auto write_end = Time::now();
     _results_saving_time = Time::diff(write_start, write_end);
 
-    _num_genomes = s_ids.size();
-    _num_markers = _m_ids.size();
+    _num_genomes = seq_ids.size();
+    _num_markers = _markers.size();
 }
 
 
@@ -128,7 +123,7 @@ void Program::report() const {
             << "\tReading markers:  " << _markers_reading_time << " seconds\n"
             << "\tBuilding trie:    " << _trie_building_time << " seconds\n"
             << "\tReading genomes:  " << _genomes_reading_time << " seconds\n"
-            << "\tMatching markers: " << _markers_matching_time << " seconds\n"
+            << "\tMatching genomes: " << _genomes_matching_time << " seconds\n"
             << "\tSaving results:   " << _results_saving_time << " seconds\n";
 
     if (!_e.empty()) {
@@ -140,8 +135,8 @@ void Program::report() const {
 
 
 void Program::cleanup() {
-    _m_ids.clear();
-    _ac.reset();
+    _ac = aho_corasick::trie{};
+    _markers.clear();
     _m.clear();
     _q.clear();
 }

@@ -1,14 +1,14 @@
-#include "utils.h"
-#include "matcher.h"
-#include "reader.h"
+#include <matcher.hpp>
+#include <reader.hpp>
+#include <utils.hpp>
 #include <exception>
 
 
 SequenceMatcher::SequenceMatcher(
-        AhoCorasick                                         &ac,
-        tbb::concurrent_bounded_queue<FastaRecord>          &q,
-        tbb::concurrent_map<std::string, std::vector<bool>> &m,
-        tbb::concurrent_vector<std::string>                 &e)
+        aho_corasick::trie                                 &ac,
+        tbb::concurrent_bounded_queue<Fasta>               &q,
+        tbb::concurrent_map<std::string, std::set<size_t>> &m,
+        tbb::concurrent_vector<std::string>                &e)
         : _ac{ac}
         , _q{q}
         , _m{m}
@@ -16,19 +16,24 @@ SequenceMatcher::SequenceMatcher(
 
 
 void SequenceMatcher::run() {
-    FastaRecord fasta {};
+    Fasta fasta {};
 
     while(true) {
         while (!_q.try_pop(fasta));
 
-        if (fasta._id == READING_DONE) {
+        if (fasta.id == READING_DONE) {
             while(!_q.try_push(fasta));
             break;
         }
         try {
-            _m[fasta._id] = _ac.match(fasta._sequence);
+            auto result = _ac.parse_text(fasta.seq);
+            std::set<size_t> s{};
+            for (const auto &r : result) {
+                s.insert(r.get_index());
+            }
+            _m[fasta.id] = std::move(s);
         } catch (std::exception &e) {
-            _e.push_back("Error matching genome " + fasta._id + ": " + e.what());
+            _e.push_back("Error matching genome " + fasta.id + ": " + e.what());
         }
     }
 }

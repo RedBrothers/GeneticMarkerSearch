@@ -5,18 +5,18 @@
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_vector.h>
 
-#include "utils.h"
+#include <utils.hpp>
 
 
 class SequenceReader {
     std::string _dir;
 
-    tbb::concurrent_bounded_queue<FastaRecord> &_q;
+    tbb::concurrent_bounded_queue<Fasta>       &_q;
     tbb::concurrent_vector<std::string>        &_e;
 public:
     SequenceReader(
             std::string                                dir,
-            tbb::concurrent_bounded_queue<FastaRecord> &q,
+            tbb::concurrent_bounded_queue<Fasta>       &q,
             tbb::concurrent_vector<std::string>        &e);
     void run();
 };
