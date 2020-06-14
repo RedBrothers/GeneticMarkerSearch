@@ -1,6 +1,0 @@
-genomes_path=data/
-markers_file=data/markers-800k.csv
-result_file=data/results.csv
-max_queue_size=10
-num_threads=5
-verbose=1
