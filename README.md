@@ -34,8 +34,25 @@ Every loaded file is a `.gz` archive containing one multi-FASTA file.
 
 Unfortunately, markers we used are not available for public use, but we provide a `sample_markers.csv` [file](https://gist.github.com/lekhovitsky/72744a626b610d10153d71ee44d0927e) with random markers for basic testing.
 
-## Requirements
+## Dependencies
 
 The program mostly relies on basic C++ 17 functionality, but uses some third-party libraries. Particularly, `boost` is used for various file manipulations, and Intel's `TBB` for efficient concurrent data structures. Including `TBB` into the project might be tricky on certain systems, so we provide a `FindTBB.cmake` file (not our work) which solves this problem.
 
+Our implementation of Aho-Corasick turned out to be not very efficient, so we replaced it with [this one](https://github.com/cjgdev/aho_corasick). We did small adjustments o make it work in parallel manner. 
+
 ## Performance
+
+The first test is comparison of execution time of C++ and pure-Python (`ahocorapy`) Aho-Corasick implementations. We divide the main part of execution into two stages: building a trie (not parallelizable) and matching a text (parallelizable). This test allows us to estimate the upper-bound of parallelization speed-up.
+
+Since we have genomes of different size, we take an average matching time of 5 genomes. Also, we run the test for different numbers of markers. Source code of the benchmarks is stored at `benchmarks` directory. 
+
+The results on Intel Core i5 7200U processor with 2.5GHz are the following: 
+
+| # markers  |  trie (ahocorapy)  | trie (C++) | matching (ahocorapy) |  matching (C++)  |
+|---|---|---|---|---|
+| 10^3  |   |   |   |   |
+| 10^4  |   |   |   |   |
+| 10^5  |   |   |   |   |
+| 10^6  |   |   |   |   |
+
+The second test is measurement of the effect of parallelization by running the main executable on different numbers of cores.
