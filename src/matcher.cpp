@@ -1,11 +1,11 @@
-#include "utils.h"
-#include "matcher.h"
-#include "reader.h"
+#include "utils.hpp"
+#include "matcher.hpp"
+#include "reader.hpp"
 #include <exception>
 
 
 SequenceMatcher::SequenceMatcher(
-        AhoCorasick                                         &ac,
+        aho_corasick::trie                                  &ac,
         tbb::concurrent_bounded_queue<FastaRecord>          &q,
         tbb::concurrent_map<std::string, std::vector<bool>> &m,
         tbb::concurrent_vector<std::string>                 &e)
@@ -26,7 +26,7 @@ void SequenceMatcher::run() {
             break;
         }
         try {
-            _m[fasta._id] = _ac.match(fasta._sequence);
+            auto result = _ac.parse_text(fasta._sequence);
         } catch (std::exception &e) {
             _e.push_back("Error matching genome " + fasta._id + ": " + e.what());
         }

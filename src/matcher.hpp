@@ -7,19 +7,19 @@
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_vector.h>
 
-#include "utils.h"
-#include "aho_corasick.h"
+#include <utils.hpp>
+#include <aho_corasick.hpp>
 
 
 class SequenceMatcher {
-    AhoCorasick &_ac;
+    aho_corasick::trie &_ac;
 
     tbb::concurrent_bounded_queue<FastaRecord>          &_q;
     tbb::concurrent_map<std::string, std::vector<bool>> &_m;
     tbb::concurrent_vector<std::string>                 &_e;
 public:
     SequenceMatcher(
-            AhoCorasick&                                        ac,
+            aho_corasick::trie                                  &ac,
             tbb::concurrent_bounded_queue<FastaRecord>          &q,
             tbb::concurrent_map<std::string, std::vector<bool>> &m,
             tbb::concurrent_vector<std::string>                 &e);

@@ -1,5 +1,5 @@
-#include "utils.h"
-#include "program.h"
+#include "utils.hpp"
+#include "program.hpp"
 #include <thread>
 #include <cassert>
 #include <iomanip>
@@ -46,21 +46,16 @@ void Program::prepare() {
     auto read_end = Time::now();
     _markers_reading_time = Time::diff(read_start, read_end);
 
-    // save marker ids, prepare patterns
-    std::vector<std::string> patterns;
+    // save marker ids, prepare Aho-Corasick trie
     _m_ids.reserve(markers.size());
-    patterns.reserve(markers.size());
+    auto build_start = Time::now();
     for (auto &&m : markers) {
         _m_ids.push_back(std::move(m._id));
-        patterns.push_back(std::move(m._marker));
+        _ac.insert(std::move(m._marker));
     }
-    markers.clear();
-
-    // prepare Aho-Corasick trie
-    auto build_start = Time::now();
-    _ac.set(std::move(patterns));
     auto build_end = Time::now();
     _trie_building_time = Time::diff(build_start, build_end);
+    markers.clear();
 }
 
 
@@ -140,8 +135,8 @@ void Program::report() const {
 
 
 void Program::cleanup() {
+    _ac = aho_corasick::trie{};
     _m_ids.clear();
-    _ac.reset();
     _m.clear();
     _q.clear();
 }

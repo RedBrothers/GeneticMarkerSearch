@@ -1,6 +1,6 @@
 #include <boost/filesystem.hpp>
-#include "utils.h"
-#include "reader.h"
+#include "utils.hpp"
+#include "reader.hpp"
 #include <exception>
 
 namespace fs = boost::filesystem;

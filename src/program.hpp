@@ -9,10 +9,10 @@
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_vector.h>
 
-#include "utils.h"
-#include "reader.h"
-#include "matcher.h"
-#include "aho_corasick.h"
+#include <utils.hpp>
+#include <reader.hpp>
+#include <matcher.hpp>
+#include <aho_corasick.hpp>
 
 
 class Program {
@@ -21,7 +21,7 @@ class Program {
     std::string _result_file;
     std::string _markers_file;
 
-    AhoCorasick                  _ac;
+    aho_corasick::trie           _ac;
     SequenceReader               _reader;
     std::vector<SequenceMatcher> _matchers;
 
