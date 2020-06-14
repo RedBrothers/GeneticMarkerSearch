@@ -5,7 +5,7 @@
 #include <tbb/concurrent_queue.h>
 #include <tbb/concurrent_vector.h>
 
-#include "utils.hpp"
+#include <utils.hpp>
 
 
 class SequenceReader {

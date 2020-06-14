@@ -1,7 +1,7 @@
-#include <boost/filesystem.hpp>
-#include "utils.hpp"
-#include "reader.hpp"
+#include <utils.hpp>
+#include <reader.hpp>
 #include <exception>
+#include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;
 

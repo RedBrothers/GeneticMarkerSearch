@@ -1,5 +1,6 @@
 #ifndef GENES_UTILS_H
 #define GENES_UTILS_H
+
 #include <vector>
 #include <string>
 #include <chrono>

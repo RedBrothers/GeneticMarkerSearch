@@ -1,5 +1,5 @@
 genomes_path=data/
-markers_file=data/markers-100.csv
+markers_file=data/markers.csv
 result_file=data/results.csv
 max_queue_size=10
 num_threads=5
