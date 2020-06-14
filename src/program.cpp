@@ -74,8 +74,8 @@ void Program::execute() {
     _genomes_reading_time = Time::diff(read_start, read_end);
 
     // redirect the new free thread
-    //_matchers.emplace_back(_ac, _q, _m, _e);
-    //matcher_threads.emplace_back(&SequenceMatcher::run, &_matchers.back());
+    _matchers.emplace_back(_ac, _q, _m, _e);
+    matcher_threads.emplace_back(&SequenceMatcher::run, &_matchers.back());
 
     // wait for matcher threads to finish
     for (auto& t : matcher_threads)

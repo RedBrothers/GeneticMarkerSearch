@@ -7,7 +7,7 @@ from ahocorapy.keywordtree import KeywordTree
 
 
 for n_markers in (1_000, 10_000, 100_000, 1_000_000,):
-    markers = pd.read_csv("./markers.csv", header=None, index_col=0, nrows=n_markers)
+    markers = pd.read_csv("../data/markers.csv", header=None, index_col=0, nrows=n_markers)
 
     print(f"Number of markers: {n_markers}")
 
@@ -20,7 +20,7 @@ for n_markers in (1_000, 10_000, 100_000, 1_000_000,):
     print(f"Trie built in {(end-start).total_seconds():.1f} seconds")
 
     times = []
-    for f in SeqIO.parse("./pseudo10001.fasta", "fasta"):
+    for f in SeqIO.parse("../data/pseudo10001.fasta", "fasta"):
         start = datetime.now()
         res = trie.search_all(f.seq)
         n_matches = len(list(res))
