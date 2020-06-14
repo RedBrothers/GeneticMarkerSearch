@@ -17,7 +17,7 @@ for n_markers in (1_000, 10_000, 100_000, 1_000_000,):
         trie.add(marker)
     trie.finalize()
     end = datetime.now()
-    print(f"Trie built in {(end-start).total_seconds():.1f} seconds")
+    print(f"Trie built in {(end-start).total_seconds():.3f} seconds")
 
     times = []
     for f in SeqIO.parse("../data/pseudo10001.fasta", "fasta"):

@@ -23,7 +23,8 @@ Program::Program(
         , _matchers{}
         , _verbose{verbose} {
     assert(num_threads >= 2);
-    _q.set_capacity(max_queue_size);
+    if (max_queue_size)
+        _q.set_capacity(max_queue_size);
     _matchers.reserve(num_threads);
     for (size_t i = 0; i < num_threads - 1; ++i)
         _matchers.emplace_back(_ac, _q, _m, _e);
