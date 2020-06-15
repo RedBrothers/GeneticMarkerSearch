@@ -58,3 +58,10 @@ The results on Intel Core i5 7200U processor with 2.5GHz are the following (min 
 | 10^6 | 80.0s | 30.04s | 50.0s | 17.9s |
 
 The second test is measurement of the effect of parallelization by running the main executable on different numbers of cores.
+
+
+Results for 1000 genomes and 3 mln markers (8 cores, Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz):
+Bulding trie: 105.6 seconds
+Matching markers 2520.3 seconds
+
+Overall time: ~43 minutes
