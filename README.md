@@ -61,7 +61,8 @@ The second test is measurement of the effect of parallelization by running the m
 
 
 Results for 1000 genomes and 3 mln markers (8 cores, Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz):
-Bulding trie: 105.6 seconds
-Matching markers 2520.3 seconds
 
-Overall time: ~43 minutes
+- Bulding trie: 105.6 seconds
+- Matching markers 2520.3 seconds
+
+**Overall time**: ~43 minutes
