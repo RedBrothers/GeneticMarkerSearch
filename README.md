@@ -48,16 +48,16 @@ The first test is comparison of execution time of C++ and pure-Python (`ahocorap
 
 Since we have genomes of different size, we take an average matching time of 5 genomes. Also, we run the test for different numbers of markers. Source code of the benchmarks is stored at `benchmarks` directory. 
 
-The results on Intel Core i5 7200U CPU @ 2.5GHz with 4 hardware trheads are the following (min across 3 runs): 
+The results on Intel Core i5 7200U CPU @ 2.5GHz with 4 hardware trheads are the following (min across multiple runs): 
 
 | # markers  |  trie (ahocorapy)  | trie (C++) | matching (ahocorapy) |  matching (C++)  |
 |--------:|------:|-------:|------:|------:|
-|    10^3 | 0.06s |  0.02s | 29.2s |  7.4s |
-|    10^4 | 0.45s |  0.14s | 33.9s |  8.9s |
-|    10^5 | 4.44s |  1.76s | 39.9s | 12.7s |
-|    10^6 | 80.0s | 30.04s | 50.0s | 17.9s |
-|2 * 10^6 |  | 81.2s |  | 15.0s|
-|3 * 10^6 |  | 161.0s | | 17.0s |
+|    10^3 | 0.06s |  0.02s | 29.2s |  5.8s |
+|    10^4 | 0.45s |  0.13s | 33.9s |  6.8s |
+|    10^5 | 4.44s |  1.36s | 39.9s |  9.7s |
+|    10^6 | 80.0s |  22.8s | 50.0s | 13.4s |
+|2 * 10^6 |       |  48.8s |       | 14.2s |
+|3 * 10^6 |       |  77.0s |       | 14.9s |
 
 The second test is measurement of the effect of parallelization by running the main executable on different numbers of hardware threads. On the same machine, we ran the `run_search` program on 20 fasta files (100 genomes) and 1M markers. 
 
