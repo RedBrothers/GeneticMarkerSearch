@@ -8,10 +8,6 @@ Our main goal was to implement an efficient parallel implementation, since the p
 
 The main matching part is designed as a producer-consumer pipeline, with one thread loading the genomes from the drive and storing them into a bounded queue (in order not to run out of memory), and multiple threads performing string matching. For threading, we chose `std::thread` and for efficient communication between threads we use concurrent data structures from Intel's `TBB`. 
 
-![](goto.png)
-
-![](failure.png)
-
 ## Usage
 
 After building the project, navigate to the folder with the executable and run:
@@ -90,16 +86,12 @@ The final test was made for comparison with other teams doing this project and r
 
 - Bulding trie: 105.6 seconds
 - Matching markers 2520.3 seconds
-
-**Overall time**: ~43 minutes
-
+- **Overall time**: ~43 minutes
 
 ## Possible optimizations:
-- Aho-Corasick speed-up, removing extra overhead
+- Aho-Corasick speed-up (remove overhead related to more detailed output format)
 - Using more memory-efficient data types
 - GPU parallelizations:
   - On a genom level
-  - Subgenom level
+  - On a subgenom level
   - Trie build
-  - Trie traverse
-
