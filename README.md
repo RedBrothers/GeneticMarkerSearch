@@ -12,7 +12,7 @@ The main matching part is designed as a producer-consumer pipeline, with one thr
 
 After building the project, navigate to the folder with the executable and run:
 ```bash
-./GeneticMarkerSearch CONFIG_FILE
+./run_search CONFIG_FILE
 ```
 `CONFIG_FILE` must be a valid config file, like [this](https://gist.github.com/lekhovitsky/ef19c047d1520ea6d45c715795fde06d), which specifies the following values:
 - `genomes_path`: path to a folder with genome files (either `.fasta` files or archives containing a single `.fasta` file each).
