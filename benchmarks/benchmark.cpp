@@ -51,7 +51,7 @@ void test_build_and_match(size_t num_markers) {
 
 
 int main() {
-    for (size_t n : {1000, 10000, 100000, 1000000})
+    for (size_t n : {1000, 10000, 100000, 1000000, 2000000, 3000000})
         test_build_and_match(n);
     return 0;
 }

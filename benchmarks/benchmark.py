@@ -6,7 +6,7 @@ from datetime import datetime
 from ahocorapy.keywordtree import KeywordTree
 
 
-for n_markers in (1_000, 10_000, 100_000, 1_000_000,):
+for n_markers in (1_000, 10_000, 100_000, 1_000_000, 2_000_000, 3_000_000):
     markers = pd.read_csv("../data/markers.csv", header=None, index_col=0, nrows=n_markers)
 
     print(f"Number of markers: {n_markers}")
