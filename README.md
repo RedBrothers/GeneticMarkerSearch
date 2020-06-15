@@ -8,6 +8,10 @@ Our main goal was to implement an efficient parallel implementation, since the p
 
 The main matching part is designed as a producer-consumer pipeline, with one thread loading the genomes from the drive and storing them into a bounded queue (in order not to run out of memory), and multiple threads performing string matching. For threading, we chose `std::thread` and for efficient communication between threads we use concurrent data structures from Intel's `TBB`. 
 
+![](goto.png)
+
+![](failure.png)
+
 ## Usage
 
 After building the project, navigate to the folder with the executable and run:
