@@ -48,7 +48,7 @@ The first test is comparison of execution time of C++ and pure-Python (`ahocorap
 
 Since we have genomes of different size, we take an average matching time of 5 genomes. Also, we run the test for different numbers of markers. Source code of the benchmarks is stored at `benchmarks` directory. 
 
-The results on Intel Core i5 7200U processor with 2.5GHz are the following (min across 3 runs): 
+The results on Intel Core i5 7200U CPU @ 2.5GHz with 4 hardware trheads are the following (min across 3 runs): 
 
 | # markers  |  trie (ahocorapy)  | trie (C++) | matching (ahocorapy) |  matching (C++)  |
 |-----:|------:|-------:|------:|------:|
@@ -57,10 +57,27 @@ The results on Intel Core i5 7200U processor with 2.5GHz are the following (min 
 | 10^5 | 4.44s |  1.76s | 39.9s | 12.7s |
 | 10^6 | 80.0s | 30.04s | 50.0s | 17.9s |
 
-The second test is measurement of the effect of parallelization by running the main executable on different numbers of cores.
+The second test is measurement of the effect of parallelization by running the main executable on different numbers of hardware threads. On the same machine, we ran the `run_search` program on 20 fasta files (100 genomes) and 1M markers. 
 
+With `num_threads=2` and `max_queue_size=5` (effectively, one thread for reading genomes and one thread for matching), we get
+```
+Reading markers:  8.335 seconds
+Building trie:    24.678 seconds
+Matching genomes: 1569.967 seconds
+Saving results:   12.939 seconds
+```
 
-Results for 1000 genomes and 3 mln markers (8 cores, Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz):
+With `num_threads=4` and `max_queue_size=10` (one thread for reading and three threads for matching), we get
+```
+Reading markers:  8.327 seconds
+Building trie:    27.877 seconds
+Matching genomes: 616.065 seconds
+Saving results:   16.117 seconds
+```
+
+As expected, we see x2.5 speed-up in parallelizable section of the program, which almost reaches the ideal x3 increase in performance.
+
+The final test was made for comparison with other teams doing this project and represents a `complete` run on 1000 genomes (200 files) and 3M markers (_uses our older implementation of Aho-Corasick_). It was performed in Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz with 8 cores and 16 hardware threads with `num_threads=16` and `max_queue_size=48`. The results are the following:
 
 - Bulding trie: 105.6 seconds
 - Matching markers 2520.3 seconds
