@@ -83,7 +83,7 @@ Also, we did this test for a smaller amount of genomes but for a wider range of 
 
 ![](results.png)
 
-The final test was made for comparison with other teams doing this project and represents a **complete** run on 1000 genomes (200 files) and 3M markers (_uses our older implementation of Aho-Corasick_). It was performed in Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz with 8 cores and 16 hardware threads with `num_threads=16` and `max_queue_size=48`. The results are the following:
+The final test was made for comparison with other teams doing this project and represents a **complete** run on 1000 genomes (200 files) and 3M markers (_uses our older implementation of Aho-Corasick_). It was performed on the Intel(R) Core(TM) i7-7820X CPU @ 3.60GHz with 8 cores and 16 hardware threads, with `num_threads=16` and `max_queue_size=48`. The results are the following:
 
 - Bulding trie: 105.6 seconds
 - Matching markers 2520.3 seconds
