@@ -30,9 +30,7 @@ Pseudogenomes data that we used for testing can be found [here](https://1001geno
 ```bash
 ./load_genomes.py DEST_DIR --n NUM_FILES
 ```
-Every loaded file is a `.gz` archive containing one multi-FASTA file.
-
-![](https://www.researchgate.net/profile/Diogo_Pratas/publication/315673633/figure/fig1/AS:494575153758209@1494927313401/Example-of-a-hypothetical-FASTA-file-content.png)
+Every loaded file is a `.gz` archive containing one [multi-FASTA](http://www.metagenomics.wiki/tools/fastq/multi-fasta-format) file.
 
 Unfortunately, markers we used are not available for public use, but we provide a `sample_markers.csv` [file](https://gist.github.com/lekhovitsky/72744a626b610d10153d71ee44d0927e) with random markers for basic testing.
 
