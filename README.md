@@ -90,9 +90,8 @@ The final test was made for comparison with other teams doing this project and r
 - **Overall time**: ~43 minutes
 
 ## Possible optimizations:
-- Aho-Corasick speed-up (remove overhead related to more detailed output format)
+- Aho-Corasick speed-up (remove overhead related to more detailed output format than we actually need)
 - Using more memory-efficient data types
 - GPU parallelizations:
-  - On a genom level
-  - On a subgenom level
-  - Trie build
+  - Genome/subgenome level parallelization 
+  - Parallel trie construction
